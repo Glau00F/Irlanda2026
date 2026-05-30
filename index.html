@@ -72,7 +72,7 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 .ruta-info{flex:1}
 .ruta-nombre{font-size:0.88rem;font-weight:500}
 .ruta-desc{font-size:0.78rem;color:var(--texto-suave);margin-top:1px}
-.ruta-estado{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
+.ruta-estado{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;margin-bottom:2px}
 .badge-hecha{font-size:0.7rem;padding:2px 8px;border-radius:10px;background:#2d5a3d;color:white;font-weight:500}
 .toggle-btn.activo-hecha{background:#e8f4ec;border-color:#2d5a3d;color:#2d5a3d;font-weight:500}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.75rem;margin-top:1rem}
@@ -355,16 +355,16 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;margin-bottom:1.5rem">Todos los destinos</h2>
 <div class="mapa-grid">
 <div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127968; Claregalway</div><div class="mapa-lugar-fecha">4&ndash;17 ago &middot; Base</div><div class="mapa-lugar-desc">Base durante 13 noches</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?q=Claregalway+Galway" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#9968;&#65039; Diamond Hill</div><div class="mapa-lugar-fecha">Jue 6 ago</div><div class="mapa-lugar-desc">Connemara &middot; Ruta 3&ndash;7km</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=7872932414093034851" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127963; Kylemore Abbey</div><div class="mapa-lugar-fecha">Jue 6 ago</div><div class="mapa-lugar-desc">Connemara &middot; Abre 10:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=17412239052951531945" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#9968;&#65039; Diamond Hill</div><div class="mapa-lugar-fecha">Jue 6 ago</div><div class="ruta-estado" id="estado-lugar-diamond-hill"></div><div class="mapa-lugar-desc">Connemara &middot; Ruta 3&ndash;7km</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=7872932414093034851" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127963; Kylemore Abbey</div><div class="mapa-lugar-fecha">Jue 6 ago</div><div class="ruta-estado" id="estado-lugar-kylemore"></div><div class="mapa-lugar-desc">Connemara &middot; Abre 10:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=17412239052951531945" target="_blank">&#128205; Mapa</a></div>
 <div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127968; Castillo Claregalway</div><div class="mapa-lugar-fecha">Vie 7 ago</div><div class="mapa-lugar-desc">En el pueblo &middot; S. XV</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=14018984039070894913" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127960;&#65039; Westport</div><div class="mapa-lugar-fecha">S&aacute;b 8 ago</div><div class="mapa-lugar-desc">Mayo &middot; 1h 15min</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579310720" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#128694; Salthill Prom</div><div class="mapa-lugar-fecha">Dom 9 ago</div><div class="mapa-lugar-desc">Galway &middot; 20 min</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=8315740016763010211" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127754; Killary Fjord</div><div class="mapa-lugar-fecha">Lun 10 ago</div><div class="mapa-lugar-desc">Leenane &middot; 1h</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579319824" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#9972; Ferry Aran Islands</div><div class="mapa-lugar-fecha">Mar 11 ago</div><div class="mapa-lugar-desc">Rossaveal &middot; Reservar antelaci&oacute;n</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=3476681992376017450" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127754; Acantilados de Moher</div><div class="mapa-lugar-fecha">Jue 13 ago</div><div class="mapa-lugar-desc">Clare &middot; Abre 8:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=12712382707930902790" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#129714; Poulnabrone Dolmen</div><div class="mapa-lugar-fecha">Jue 13 ago</div><div class="mapa-lugar-desc">El Burren &middot; Entrada libre</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=9891057785651171590" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127807; Lough Key Park</div><div class="mapa-lugar-fecha">Vie 14 ago</div><div class="mapa-lugar-desc">Roscommon &middot; Abre 10:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=1381215386157358350" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127960;&#65039; Westport</div><div class="mapa-lugar-fecha">S&aacute;b 8 ago</div><div class="ruta-estado" id="estado-lugar-westport"></div><div class="mapa-lugar-desc">Mayo &middot; 1h 15min</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579310720" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#128694; Salthill Prom</div><div class="mapa-lugar-fecha">Dom 9 ago</div><div class="ruta-estado" id="estado-lugar-salthill"></div><div class="mapa-lugar-desc">Galway &middot; 20 min</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=8315740016763010211" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127754; Killary Fjord</div><div class="mapa-lugar-fecha">Lun 10 ago</div><div class="ruta-estado" id="estado-lugar-killary"></div><div class="mapa-lugar-desc">Leenane &middot; 1h</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579319824" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#9972; Ferry Aran Islands</div><div class="mapa-lugar-fecha">Mar 11 ago</div><div class="ruta-estado" id="estado-lugar-islas-aran"></div><div class="mapa-lugar-desc">Rossaveal &middot; Reservar antelaci&oacute;n</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=3476681992376017450" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127754; Acantilados de Moher</div><div class="mapa-lugar-fecha">Jue 13 ago</div><div class="ruta-estado" id="estado-lugar-moher"></div><div class="mapa-lugar-desc">Clare &middot; Abre 8:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=12712382707930902790" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#129714; Poulnabrone Dolmen</div><div class="mapa-lugar-fecha">Jue 13 ago</div><div class="ruta-estado" id="estado-lugar-moher2"></div><div class="mapa-lugar-desc">El Burren &middot; Entrada libre</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=9891057785651171590" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127807; Lough Key Park</div><div class="mapa-lugar-fecha">Vie 14 ago</div><div class="ruta-estado" id="estado-lugar-lough-key"></div><div class="mapa-lugar-desc">Roscommon &middot; Abre 10:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=1381215386157358350" target="_blank">&#128205; Mapa</a></div>
 <div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127976; Hotel Marlin</div><div class="mapa-lugar-fecha">Lun 17 ago</div><div class="mapa-lugar-desc">Dubl&iacute;n &middot; Noche 17&ndash;18 ago</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?q=Hotel+Marlin+Dublin" target="_blank">&#128205; Mapa</a></div>
 </div>
 </div>
@@ -559,13 +559,19 @@ onSnapshot(docRefRutas, (snap) => {
 
 function renderRuta(id) {
   const datos = window._estadoRutas[id] || {};
+  let badgeHtml = '';
+  if (datos.hecha) badgeHtml += '<span class="badge-hecha">&#10003; Hecha</span>';
+  if (datos.estrellas) badgeHtml += '<span class="badge-nota"><span class="estrellas-mini">' + '&#9733;'.repeat(datos.estrellas) + '</span></span>';
+  if (datos.nota) badgeHtml += '<span class="badge-nota">&#128172; ' + datos.nota.substring(0,30) + (datos.nota.length > 30 ? '&hellip;' : '') + '</span>';
+  // Actualizar en Calendario
   const estadoEl = document.getElementById('estado-' + id);
-  if (!estadoEl) return;
-  let html = '';
-  if (datos.hecha) html += '<span class="badge-hecha">&#10003; Hecha</span>';
-  if (datos.estrellas) html += '<span class="badge-nota"><span class="estrellas-mini">' + '&#9733;'.repeat(datos.estrellas) + '</span></span>';
-  if (datos.nota) html += '<span class="badge-nota">&#128172; ' + datos.nota.substring(0,30) + (datos.nota.length > 30 ? '&hellip;' : '') + '</span>';
-  estadoEl.innerHTML = html;
+  if (estadoEl) estadoEl.innerHTML = badgeHtml;
+  // Actualizar en Lugares (puede haber uno o dos elementos)
+  const lugarEl = document.getElementById('estado-lugar-' + id);
+  if (lugarEl) lugarEl.innerHTML = badgeHtml;
+  const lugarEl2 = document.getElementById('estado-lugar-' + id + '2');
+  if (lugarEl2) lugarEl2.innerHTML = badgeHtml;
+  // Actualizar controles
   const btnH = document.querySelector('#ctrl-' + id + ' .toggle-btn');
   const notaEl = document.getElementById('nota-' + id);
   const starsEl = document.getElementById('stars-' + id);
