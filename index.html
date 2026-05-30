@@ -64,7 +64,17 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 .mapa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin-top:1rem}
 .mapa-lugar{border:1px solid var(--gris-borde);border-radius:10px;padding:0.8rem;background:white}
 .mapa-lugar-nombre{font-size:0.88rem;font-weight:500;margin-bottom:0.2rem}
+.mapa-lugar-fecha{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--verde);font-weight:500;margin-bottom:0.15rem}
 .mapa-lugar-desc{font-size:0.78rem;color:var(--texto-suave)}
+.ruta{display:flex;align-items:flex-start;gap:10px;padding:0.6rem 0;border-bottom:1px solid var(--gris)}
+.ruta:last-child{border-bottom:none}
+.ruta-icono{width:32px;height:32px;border-radius:8px;background:var(--verde-claro);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.ruta-info{flex:1}
+.ruta-nombre{font-size:0.88rem;font-weight:500}
+.ruta-desc{font-size:0.78rem;color:var(--texto-suave);margin-top:1px}
+.ruta-estado{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
+.badge-hecha{font-size:0.7rem;padding:2px 8px;border-radius:10px;background:#2d5a3d;color:white;font-weight:500}
+.toggle-btn.activo-hecha{background:#e8f4ec;border-color:#2d5a3d;color:#2d5a3d;font-weight:500}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.75rem;margin-top:1rem}
 .info-card{border:1px solid var(--gris-borde);border-radius:10px;padding:1rem;background:white}
 .info-card h3{font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--texto-suave);font-weight:500;margin-bottom:0.5rem}
@@ -85,17 +95,6 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 /* ── EDITOR ── */
 .btn-editor-acceso{position:absolute;bottom:0.6rem;right:0.8rem;background:rgba(255,255,255,0.15);border:none;color:rgba(255,255,255,0.4);font-size:0.7rem;padding:3px 8px;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif}
 .btn-editor-acceso:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.25)}
-
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center}
-.modal-overlay.visible{display:flex}
-.modal{background:white;border-radius:16px;padding:2rem;width:90%;max-width:320px;text-align:center}
-.modal h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:1rem}
-.modal input{width:100%;border:1px solid var(--gris-borde);border-radius:8px;padding:0.7rem 1rem;font-size:1.1rem;text-align:center;letter-spacing:4px;font-family:'DM Sans',sans-serif;outline:none}
-.modal input:focus{border-color:var(--verde)}
-.modal-btns{display:flex;gap:0.5rem;margin-top:1rem}
-.btn-cancelar{flex:1;padding:0.7rem;border:1px solid var(--gris-borde);border-radius:8px;background:white;cursor:pointer;font-family:'DM Sans',sans-serif}
-.btn-entrar{flex:1;padding:0.7rem;border:none;border-radius:8px;background:var(--verde);color:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
-.modal-error{color:#c0392b;font-size:0.8rem;margin-top:0.5rem;min-height:1.2em}
 
 .barra-editor{display:none;background:#1a1a18;color:white;padding:0.6rem 1rem;font-size:0.8rem;align-items:center;justify-content:space-between;position:sticky;top:45px;z-index:99}
 .barra-editor.visible{display:flex}
@@ -131,23 +130,10 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 </head>
 <body>
 
-<!-- Modal contraseña -->
-<div class="modal-overlay" id="modal-pwd">
-  <div class="modal">
-    <h3>Modo editor</h3>
-    <input type="password" id="pwd-input" placeholder="····" maxlength="10" inputmode="numeric">
-    <div class="modal-error" id="pwd-error"></div>
-    <div class="modal-btns">
-      <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn-entrar" onclick="verificarPwd()">Entrar</button>
-    </div>
-  </div>
-</div>
-
 <header>
 <h1>Irlanda <em>&middot; Agosto 2026</em></h1>
 <p class="subtitulo">4 &ndash; 18 de agosto &nbsp;&middot;&nbsp; Claregalway, Galway &amp; Dubl&iacute;n</p>
-<button class="btn-editor-acceso" onclick="abrirModal()">&#9998;</button>
+<button class="btn-editor-acceso" onclick="activarEditor()">&#9998;</button>
 </header>
 
 <div class="barra-editor" id="barra-editor">
@@ -192,7 +178,10 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">3</div><div class="dia-info"><div class="dia-fecha">Jueves &middot; 6 agosto</div><div class="dia-titulo">Connemara: Diamond Hill + Kylemore</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway. Ruta circular de Diamond Hill (3&ndash;7 km, senderos bien se&ntilde;alizados para todos los niveles). Despu&eacute;s visita a la Abad&iacute;a de Kylemore (abre a las 10:00).</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Diamond Hill</span><span class="chip cultura">Kylemore Abbey</span></div></div><div class="seccion"><div class="seccion-titulo">Ubicaciones</div><a class="btn-mapa" href="https://maps.google.com/?cid=7872932414093034851" target="_blank">&#128205; Diamond Hill</a>&nbsp;<a class="btn-mapa" href="https://maps.google.com/?cid=17412239052951531945" target="_blank">&#128205; Kylemore Abbey</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Clifden, de camino)</div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway. Ruta circular de Diamond Hill (3&ndash;7 km, senderos bien se&ntilde;alizados para todos los niveles). Despu&eacute;s visita a la Abad&iacute;a de Kylemore (abre a las 10:00).</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Diamond Hill</span><span class="chip cultura">Kylemore Abbey</span></div>
+<div class="ruta" style="margin-top:0.8rem" data-id="diamond-hill"><div class="ruta-icono">&#9968;&#65039;</div><div class="ruta-info"><div class="ruta-nombre">Diamond Hill</div><div class="ruta-desc">Ruta circular 3&ndash;7 km</div><div class="ruta-estado" id="estado-diamond-hill"></div><div class="rest-controles" id="ctrl-diamond-hill"><div class="ctrl-fila"><span class="ctrl-label">Hecha</span><button class="toggle-btn" onclick="toggleRuta('diamond-hill',this)">No</button></div><div class="ctrl-fila"><span class="ctrl-label">Valoraci&oacute;n</span><div class="estrellas" id="stars-diamond-hill"><span class="estrella" onclick="setEstrellasRuta('diamond-hill',1)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('diamond-hill',2)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('diamond-hill',3)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('diamond-hill',4)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('diamond-hill',5)">&#9733;</span></div></div><div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="A&ntilde;ade una nota..." onchange="setNotaRuta('diamond-hill',this.value)" id="nota-diamond-hill"></textarea></div></div></div></div>
+<div class="ruta" data-id="kylemore"><div class="ruta-icono">&#127963;</div><div class="ruta-info"><div class="ruta-nombre">Kylemore Abbey</div><div class="ruta-desc">Visita a la abadía</div><div class="ruta-estado" id="estado-kylemore"></div><div class="rest-controles" id="ctrl-kylemore"><div class="ctrl-fila"><span class="ctrl-label">Visitada</span><button class="toggle-btn" onclick="toggleRuta('kylemore',this)">No</button></div><div class="ctrl-fila"><span class="ctrl-label">Valoraci&oacute;n</span><div class="estrellas" id="stars-kylemore"><span class="estrella" onclick="setEstrellasRuta('kylemore',1)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('kylemore',2)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('kylemore',3)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('kylemore',4)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('kylemore',5)">&#9733;</span></div></div><div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="A&ntilde;ade una nota..." onchange="setNotaRuta('kylemore',this.value)" id="nota-kylemore"></textarea></div></div></div></div>
+</div><div class="seccion"><div class="seccion-titulo">Ubicaciones</div><a class="btn-mapa" href="https://maps.google.com/?cid=7872932414093034851" target="_blank">&#128205; Diamond Hill</a>&nbsp;<a class="btn-mapa" href="https://maps.google.com/?cid=17412239052951531945" target="_blank">&#128205; Kylemore Abbey</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Clifden, de camino)</div>
 <div class="restaurante" data-id="guys-seafood"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">Guy's Seafood Bar</div><div class="rest-desc">Marisco fresco, ambiente de pub. Muy bien valorado. Clifden. Abre a las 12:00.</div><div class="rest-estado" id="estado-guys-seafood"></div><a class="btn-mapa" href="https://maps.google.com/?q=Guys+Seafood+Bar+Clifden" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-guys-seafood">
   <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('guys-seafood','reservado',this)">No</button></div>
   <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('guys-seafood','visitado',this)">No</button></div>
@@ -215,7 +204,9 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">5</div><div class="dia-info"><div class="dia-fecha">S&aacute;bado &middot; 8 agosto</div><div class="dia-titulo">Westport, County Mayo</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1h 15min desde Claregalway. Pueblo con mucho encanto en la bah&iacute;a de Clew. Paseo por el puerto y el centro hist&oacute;rico.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Paseo por el puerto</span><span class="chip cultura">Centro hist&oacute;rico</span><span class="chip">Bah&iacute;a de Clew</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579310720" target="_blank">&#128205; Westport</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde cenar</div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1h 15min desde Claregalway. Pueblo con mucho encanto en la bah&iacute;a de Clew. Paseo por el puerto y el centro hist&oacute;rico.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Paseo por el puerto</span><span class="chip cultura">Centro hist&oacute;rico</span><span class="chip">Bah&iacute;a de Clew</span></div>
+<div class="ruta" style="margin-top:0.8rem" data-id="westport"><div class="ruta-icono">&#127960;&#65039;</div><div class="ruta-info"><div class="ruta-nombre">Westport</div><div class="ruta-desc">Pueblo &middot; Puerto &middot; Bah&iacute;a de Clew</div><div class="ruta-estado" id="estado-westport"></div><div class="rest-controles" id="ctrl-westport"><div class="ctrl-fila"><span class="ctrl-label">Hecha</span><button class="toggle-btn" onclick="toggleRuta('westport',this)">No</button></div><div class="ctrl-fila"><span class="ctrl-label">Valoraci&oacute;n</span><div class="estrellas" id="stars-westport"><span class="estrella" onclick="setEstrellasRuta('westport',1)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('westport',2)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('westport',3)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('westport',4)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('westport',5)">&#9733;</span></div></div><div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="A&ntilde;ade una nota..." onchange="setNotaRuta('westport',this.value)" id="nota-westport"></textarea></div></div></div></div>
+<a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579310720" target="_blank">&#128205; Westport</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde cenar</div>
 <div class="restaurante" data-id="sage-westport"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Sage Restaurant</div><div class="rest-desc">Cocina irlandesa creativa. Uno de los mejores de Westport. Desde las 17:30.</div><div class="rest-aviso">&#9888;&#65039; Reservar con antelaci&oacute;n. Cerrado lunes y domingos.</div><div class="rest-estado" id="estado-sage-westport"></div><a class="btn-mapa" href="https://maps.google.com/?q=Sage+Restaurant+Westport" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-sage-westport">
   <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('sage-westport','reservado',this)">No</button></div>
   <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('sage-westport','visitado',this)">No</button></div>
@@ -233,7 +224,9 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num tranquilo">6</div><div class="dia-info"><div class="dia-fecha">Domingo &middot; 9 agosto</div><div class="dia-titulo">Salthill y paseo mar&iacute;timo</div></div><span class="dia-badge badge-tranquilo">Tranquilo</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Paseo por el Salthill Prom, con vistas a la bah&iacute;a de Galway. Hay una tradici&oacute;n local: dar una patada a la pared al final del paseo para traer buena suerte.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Paseo mar&iacute;timo</span><span class="chip gastronomia">Pubs</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=8315740016763010211" target="_blank">&#128205; Salthill Prom</a></div><div class="seccion"><div class="seccion-titulo">Para la tarde / noche</div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Paseo por el Salthill Prom, con vistas a la bah&iacute;a de Galway. Hay una tradici&oacute;n local: dar una patada a la pared al final del paseo para traer buena suerte.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Paseo mar&iacute;timo</span><span class="chip gastronomia">Pubs</span></div>
+<div class="ruta" style="margin-top:0.8rem" data-id="salthill"><div class="ruta-icono">&#128694;</div><div class="ruta-info"><div class="ruta-nombre">Salthill Prom</div><div class="ruta-desc">Paseo mar&iacute;timo</div><div class="ruta-estado" id="estado-salthill"></div><div class="rest-controles" id="ctrl-salthill"><div class="ctrl-fila"><span class="ctrl-label">Hecha</span><button class="toggle-btn" onclick="toggleRuta('salthill',this)">No</button></div><div class="ctrl-fila"><span class="ctrl-label">Valoraci&oacute;n</span><div class="estrellas" id="stars-salthill"><span class="estrella" onclick="setEstrellasRuta('salthill',1)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('salthill',2)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('salthill',3)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('salthill',4)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('salthill',5)">&#9733;</span></div></div><div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="A&ntilde;ade una nota..." onchange="setNotaRuta('salthill',this.value)" id="nota-salthill"></textarea></div></div></div></div>
+<a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=8315740016763010211" target="_blank">&#128205; Salthill Prom</a></div><div class="seccion"><div class="seccion-titulo">Para la tarde / noche</div>
 <div class="restaurante" data-id="oconnors-pub"><div class="rest-icono">&#127926;</div><div class="rest-info"><div class="rest-nombre">O'Connor's Famous Pub</div><div class="rest-desc">M&uacute;sica tradicional irlandesa en vivo desde las 19:30. Solo bebidas, no es restaurante.</div><div class="rest-estado" id="estado-oconnors-pub"></div><a class="btn-mapa" href="https://maps.google.com/?q=OConnors+Famous+Pub+Salthill+Galway" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-oconnors-pub">
   <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('oconnors-pub','visitado',this)">No</button></div>
   <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-oconnors-pub"><span class="estrella" onclick="setEstrellas('oconnors-pub',1)">★</span><span class="estrella" onclick="setEstrellas('oconnors-pub',2)">★</span><span class="estrella" onclick="setEstrellas('oconnors-pub',3)">★</span><span class="estrella" onclick="setEstrellas('oconnors-pub',4)">★</span><span class="estrella" onclick="setEstrellas('oconnors-pub',5)">★</span></div></div>
@@ -244,7 +237,9 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">7</div><div class="dia-info"><div class="dia-fecha">Lunes &middot; 10 agosto</div><div class="dia-titulo">Killary Fjord &middot; Leenane</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway. El &uacute;nico fiordo de Irlanda. Paseo suave a orillas del agua. El pueblo de Leenane es el escenario de la pel&iacute;cula <em>The Field</em>.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Camino del Fiordo</span><span class="chip cultura">Leenane</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579319824" target="_blank">&#128205; Leenane / Killary</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Leenane)</div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway. El &uacute;nico fiordo de Irlanda. Paseo suave a orillas del agua. El pueblo de Leenane es el escenario de la pel&iacute;cula <em>The Field</em>.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Camino del Fiordo</span><span class="chip cultura">Leenane</span></div>
+<div class="ruta" style="margin-top:0.8rem" data-id="killary"><div class="ruta-icono">&#127754;</div><div class="ruta-info"><div class="ruta-nombre">Killary Fjord</div><div class="ruta-desc">Camino del fiordo &middot; Leenane</div><div class="ruta-estado" id="estado-killary"></div><div class="rest-controles" id="ctrl-killary"><div class="ctrl-fila"><span class="ctrl-label">Hecha</span><button class="toggle-btn" onclick="toggleRuta('killary',this)">No</button></div><div class="ctrl-fila"><span class="ctrl-label">Valoraci&oacute;n</span><div class="estrellas" id="stars-killary"><span class="estrella" onclick="setEstrellasRuta('killary',1)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('killary',2)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('killary',3)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('killary',4)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('killary',5)">&#9733;</span></div></div><div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="A&ntilde;ade una nota..." onchange="setNotaRuta('killary',this.value)" id="nota-killary"></textarea></div></div></div></div>
+<a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579319824" target="_blank">&#128205; Leenane / Killary</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Leenane)</div>
 <div class="restaurante" data-id="hamiltons-bar"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">Hamilton's Bar &amp; Restaurant</div><div class="rest-desc">Pub tradicional con vistas al fiordo. Buena comida casera a precios razonables.</div><div class="rest-estado" id="estado-hamiltons-bar"></div><a class="btn-mapa" href="https://maps.google.com/?q=Hamiltons+Bar+Leenane" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-hamiltons-bar">
   <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('hamiltons-bar','reservado',this)">No</button></div>
   <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('hamiltons-bar','visitado',this)">No</button></div>
@@ -261,7 +256,9 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num especial">8</div><div class="dia-info"><div class="dia-fecha">Martes &middot; 11 agosto</div><div class="dia-titulo">Islas Aran</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Ferry desde Rossaveal (~35 min en coche hasta el puerto + 40 min de traves&iacute;a). D&iacute;a completo en la isla: paisajes &uacute;nicos, monumentos prehist&oacute;ricos, cultura ga&eacute;lica. Lunes: menos turistas que el fin de semana.</p><div class="chips" style="margin-top:0.6rem"><span class="chip ferry">Ferry Rossaveal</span><span class="chip senderismo">Paseo por la isla</span><span class="chip cultura">Cultura ga&eacute;lica</span><span class="chip gastronomia">Marisco fresco</span></div><div class="alerta" style="margin-top:0.8rem">&#9888;&#65039; Reservar el ferry con bastante antelaci&oacute;n. En agosto se llena r&aacute;pido.</div></div><div class="seccion"><div class="seccion-titulo">Ubicaci&oacute;n del ferry</div><a class="btn-mapa" href="https://maps.google.com/?cid=3476681992376017450" target="_blank">&#128205; Ferry Aran Islands (Rossaveal)</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer</div><p style="font-size:0.88rem;color:var(--texto-suave)">En la isla hay opciones sencillas de pub food y marisco fresco muy bueno. Cenar en casa al volver.</p></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Ferry desde Rossaveal (~35 min en coche hasta el puerto + 40 min de traves&iacute;a). D&iacute;a completo en la isla: paisajes &uacute;nicos, monumentos prehist&oacute;ricos, cultura ga&eacute;lica. Lunes: menos turistas que el fin de semana.</p><div class="chips" style="margin-top:0.6rem"><span class="chip ferry">Ferry Rossaveal</span><span class="chip senderismo">Paseo por la isla</span><span class="chip cultura">Cultura ga&eacute;lica</span><span class="chip gastronomia">Marisco fresco</span></div>
+<div class="ruta" style="margin-top:0.8rem" data-id="islas-aran"><div class="ruta-icono">&#9972;</div><div class="ruta-info"><div class="ruta-nombre">Islas Aran</div><div class="ruta-desc">Ferry desde Rossaveal</div><div class="ruta-estado" id="estado-islas-aran"></div><div class="rest-controles" id="ctrl-islas-aran"><div class="ctrl-fila"><span class="ctrl-label">Hecha</span><button class="toggle-btn" onclick="toggleRuta('islas-aran',this)">No</button></div><div class="ctrl-fila"><span class="ctrl-label">Valoraci&oacute;n</span><div class="estrellas" id="stars-islas-aran"><span class="estrella" onclick="setEstrellasRuta('islas-aran',1)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('islas-aran',2)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('islas-aran',3)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('islas-aran',4)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('islas-aran',5)">&#9733;</span></div></div><div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="A&ntilde;ade una nota..." onchange="setNotaRuta('islas-aran',this.value)" id="nota-islas-aran"></textarea></div></div></div></div>
+<div class="alerta" style="margin-top:0.8rem">&#9888;&#65039; Reservar el ferry con bastante antelaci&oacute;n. En agosto se llena r&aacute;pido.</div></div><div class="seccion"><div class="seccion-titulo">Ubicaci&oacute;n del ferry</div><a class="btn-mapa" href="https://maps.google.com/?cid=3476681992376017450" target="_blank">&#128205; Ferry Aran Islands (Rossaveal)</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer</div><p style="font-size:0.88rem;color:var(--texto-suave)">En la isla hay opciones sencillas de pub food y marisco fresco muy bueno. Cenar en casa al volver.</p></div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
@@ -271,7 +268,9 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">10</div><div class="dia-info"><div class="dia-fecha">Jueves &middot; 13 agosto</div><div class="dia-titulo">Acantilados de Moher &middot; El Burren</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1h 30min desde Claregalway. Parada en el Dolmen de Poulnabrone (El Burren, 5.000 a&ntilde;os, entrada libre) de camino. Los acantilados abren a las 8:00 &mdash; mejor llegar antes de las 10:00 en agosto.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Acantilados de Moher</span><span class="chip cultura">Dolmen de Poulnabrone</span><span class="chip cultura">El Burren</span></div><div class="alerta" style="margin-top:0.8rem">&#9888;&#65039; En agosto hay mucha gente. Salir temprano.</div></div><div class="seccion"><div class="seccion-titulo">Ubicaciones</div><a class="btn-mapa" href="https://maps.google.com/?cid=12712382707930902790" target="_blank">&#128205; Acantilados de Moher</a>&nbsp;<a class="btn-mapa" href="https://maps.google.com/?cid=9891057785651171590" target="_blank">&#128205; Poulnabrone Dolmen</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde cenar (Doolin)</div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1h 30min desde Claregalway. Parada en el Dolmen de Poulnabrone (El Burren, 5.000 a&ntilde;os, entrada libre) de camino. Los acantilados abren a las 8:00 &mdash; mejor llegar antes de las 10:00 en agosto.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Acantilados de Moher</span><span class="chip cultura">Dolmen de Poulnabrone</span><span class="chip cultura">El Burren</span></div>
+<div class="ruta" style="margin-top:0.8rem" data-id="moher"><div class="ruta-icono">&#127754;</div><div class="ruta-info"><div class="ruta-nombre">Acantilados de Moher &middot; El Burren</div><div class="ruta-desc">Moher + Dolmen de Poulnabrone</div><div class="ruta-estado" id="estado-moher"></div><div class="rest-controles" id="ctrl-moher"><div class="ctrl-fila"><span class="ctrl-label">Hecha</span><button class="toggle-btn" onclick="toggleRuta('moher',this)">No</button></div><div class="ctrl-fila"><span class="ctrl-label">Valoraci&oacute;n</span><div class="estrellas" id="stars-moher"><span class="estrella" onclick="setEstrellasRuta('moher',1)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('moher',2)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('moher',3)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('moher',4)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('moher',5)">&#9733;</span></div></div><div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="A&ntilde;ade una nota..." onchange="setNotaRuta('moher',this.value)" id="nota-moher"></textarea></div></div></div></div>
+<div class="alerta" style="margin-top:0.8rem">&#9888;&#65039; En agosto hay mucha gente. Salir temprano.</div></div><div class="seccion"><div class="seccion-titulo">Ubicaciones</div><a class="btn-mapa" href="https://maps.google.com/?cid=12712382707930902790" target="_blank">&#128205; Acantilados de Moher</a>&nbsp;<a class="btn-mapa" href="https://maps.google.com/?cid=9891057785651171590" target="_blank">&#128205; Poulnabrone Dolmen</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde cenar (Doolin)</div>
 <div class="restaurante" data-id="russells-doolin"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Russells Seafood Bar</div><div class="rest-desc">Uno de los mejores de la zona. Marisco y cocina irlandesa de nivel. Desde las 17:00.</div><div class="rest-aviso">&#9888;&#65039; Muy popular. Reservar con antelaci&oacute;n.</div><div class="rest-estado" id="estado-russells-doolin"></div><a class="btn-mapa" href="https://maps.google.com/?q=Russells+Seafood+Bar+Doolin" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-russells-doolin">
   <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('russells-doolin','reservado',this)">No</button></div>
   <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('russells-doolin','visitado',this)">No</button></div>
@@ -289,7 +288,9 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">11</div><div class="dia-info"><div class="dia-fecha">Viernes &middot; 14 agosto</div><div class="dia-titulo">Lough Key Forest Park</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway (direcci&oacute;n Roscommon). Parque forestal con rutas suaves entre bosques y lago. Menos tur&iacute;stico, muy tranquilo. Abre a las 10:00.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Rutas forestales</span><span class="chip">Lago Lough Key</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=1381215386157358350" target="_blank">&#128205; Lough Key Forest Park</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Boyle)</div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway (direcci&oacute;n Roscommon). Parque forestal con rutas suaves entre bosques y lago. Menos tur&iacute;stico, muy tranquilo. Abre a las 10:00.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Rutas forestales</span><span class="chip">Lago Lough Key</span></div>
+<div class="ruta" style="margin-top:0.8rem" data-id="lough-key"><div class="ruta-icono">&#127807;</div><div class="ruta-info"><div class="ruta-nombre">Lough Key Forest Park</div><div class="ruta-desc">Rutas forestales &middot; Lago</div><div class="ruta-estado" id="estado-lough-key"></div><div class="rest-controles" id="ctrl-lough-key"><div class="ctrl-fila"><span class="ctrl-label">Hecha</span><button class="toggle-btn" onclick="toggleRuta('lough-key',this)">No</button></div><div class="ctrl-fila"><span class="ctrl-label">Valoraci&oacute;n</span><div class="estrellas" id="stars-lough-key"><span class="estrella" onclick="setEstrellasRuta('lough-key',1)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('lough-key',2)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('lough-key',3)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('lough-key',4)">&#9733;</span><span class="estrella" onclick="setEstrellasRuta('lough-key',5)">&#9733;</span></div></div><div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="A&ntilde;ade una nota..." onchange="setNotaRuta('lough-key',this.value)" id="nota-lough-key"></textarea></div></div></div></div>
+<a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=1381215386157358350" target="_blank">&#128205; Lough Key Forest Park</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Boyle)</div>
 <div class="restaurante" data-id="lovage-boyle"><div class="rest-icono">&#9749;</div><div class="rest-info"><div class="rest-nombre">Lovage at the Gate Lodge Caf&eacute;</div><div class="rest-desc">Caf&eacute;-bistr&oacute; junto al r&iacute;o en Boyle. Perfecto para el almuerzo. Abierto hasta las 17:00.</div><div class="rest-estado" id="estado-lovage-boyle"></div><a class="btn-mapa" href="https://maps.google.com/?q=Lovage+Gate+Lodge+Cafe+Boyle" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-lovage-boyle">
   <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('lovage-boyle','visitado',this)">No</button></div>
   <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-lovage-boyle"><span class="estrella" onclick="setEstrellas('lovage-boyle',1)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',2)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',3)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',4)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',5)">★</span></div></div>
@@ -353,18 +354,18 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 <div class="vista" id="vista-lugares">
 <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;margin-bottom:1.5rem">Todos los destinos</h2>
 <div class="mapa-grid">
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127968; Claregalway</div><div class="mapa-lugar-desc">Base durante 13 noches</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?q=Claregalway+Galway" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#9968;&#65039; Diamond Hill</div><div class="mapa-lugar-desc">Connemara &middot; Ruta 3&ndash;7km</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=7872932414093034851" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127963; Kylemore Abbey</div><div class="mapa-lugar-desc">Connemara &middot; Abre 10:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=17412239052951531945" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#9972; Ferry Aran Islands</div><div class="mapa-lugar-desc">Rossaveal &middot; Reservar antelaci&oacute;n</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=3476681992376017450" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127754; Acantilados de Moher</div><div class="mapa-lugar-desc">Clare &middot; Abre 8:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=12712382707930902790" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#129714; Poulnabrone Dolmen</div><div class="mapa-lugar-desc">El Burren &middot; Entrada libre</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=9891057785651171590" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127960;&#65039; Westport</div><div class="mapa-lugar-desc">Mayo &middot; 1h 15min</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579310720" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127754; Killary Fjord</div><div class="mapa-lugar-desc">Leenane &middot; 1h</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579319824" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127807; Lough Key Park</div><div class="mapa-lugar-desc">Roscommon &middot; Abre 10:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=1381215386157358350" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#128694; Salthill Prom</div><div class="mapa-lugar-desc">Galway &middot; 20 min</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=8315740016763010211" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127968; Castillo Claregalway</div><div class="mapa-lugar-desc">En el pueblo &middot; S. XV</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=14018984039070894913" target="_blank">&#128205; Mapa</a></div>
-<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127976; Hotel Marlin</div><div class="mapa-lugar-desc">Dubl&iacute;n &middot; Noche 17&ndash;18 ago</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?q=Hotel+Marlin+Dublin" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127968; Claregalway</div><div class="mapa-lugar-fecha">4&ndash;17 ago &middot; Base</div><div class="mapa-lugar-desc">Base durante 13 noches</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?q=Claregalway+Galway" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#9968;&#65039; Diamond Hill</div><div class="mapa-lugar-fecha">Jue 6 ago</div><div class="mapa-lugar-desc">Connemara &middot; Ruta 3&ndash;7km</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=7872932414093034851" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127963; Kylemore Abbey</div><div class="mapa-lugar-fecha">Jue 6 ago</div><div class="mapa-lugar-desc">Connemara &middot; Abre 10:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=17412239052951531945" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127968; Castillo Claregalway</div><div class="mapa-lugar-fecha">Vie 7 ago</div><div class="mapa-lugar-desc">En el pueblo &middot; S. XV</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=14018984039070894913" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127960;&#65039; Westport</div><div class="mapa-lugar-fecha">S&aacute;b 8 ago</div><div class="mapa-lugar-desc">Mayo &middot; 1h 15min</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579310720" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#128694; Salthill Prom</div><div class="mapa-lugar-fecha">Dom 9 ago</div><div class="mapa-lugar-desc">Galway &middot; 20 min</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=8315740016763010211" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127754; Killary Fjord</div><div class="mapa-lugar-fecha">Lun 10 ago</div><div class="mapa-lugar-desc">Leenane &middot; 1h</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579319824" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#9972; Ferry Aran Islands</div><div class="mapa-lugar-fecha">Mar 11 ago</div><div class="mapa-lugar-desc">Rossaveal &middot; Reservar antelaci&oacute;n</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=3476681992376017450" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127754; Acantilados de Moher</div><div class="mapa-lugar-fecha">Jue 13 ago</div><div class="mapa-lugar-desc">Clare &middot; Abre 8:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=12712382707930902790" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#129714; Poulnabrone Dolmen</div><div class="mapa-lugar-fecha">Jue 13 ago</div><div class="mapa-lugar-desc">El Burren &middot; Entrada libre</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=9891057785651171590" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127807; Lough Key Park</div><div class="mapa-lugar-fecha">Vie 14 ago</div><div class="mapa-lugar-desc">Roscommon &middot; Abre 10:00</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?cid=1381215386157358350" target="_blank">&#128205; Mapa</a></div>
+<div class="mapa-lugar"><div class="mapa-lugar-nombre">&#127976; Hotel Marlin</div><div class="mapa-lugar-fecha">Lun 17 ago</div><div class="mapa-lugar-desc">Dubl&iacute;n &middot; Noche 17&ndash;18 ago</div><a class="btn-mapa" style="margin-top:0.5rem;display:inline-flex" href="https://maps.google.com/?q=Hotel+Marlin+Dublin" target="_blank">&#128205; Mapa</a></div>
 </div>
 </div>
 
@@ -547,28 +548,55 @@ window.setNota = async function(id, texto) {
   if (!window._modoEditor) return;
   await guardar(id, 'nota', texto);
 };
+
+// ── RUTAS ──
+const docRefRutas = doc(db, 'viaje', 'rutas');
+window._estadoRutas = {};
+onSnapshot(docRefRutas, (snap) => {
+  window._estadoRutas = snap.exists() ? snap.data() : {};
+  ['diamond-hill','kylemore','westport','salthill','killary','islas-aran','moher','lough-key'].forEach(id => renderRuta(id));
+});
+
+function renderRuta(id) {
+  const datos = window._estadoRutas[id] || {};
+  const estadoEl = document.getElementById('estado-' + id);
+  if (!estadoEl) return;
+  let html = '';
+  if (datos.hecha) html += '<span class="badge-hecha">&#10003; Hecha</span>';
+  if (datos.estrellas) html += '<span class="badge-nota"><span class="estrellas-mini">' + '&#9733;'.repeat(datos.estrellas) + '</span></span>';
+  if (datos.nota) html += '<span class="badge-nota">&#128172; ' + datos.nota.substring(0,30) + (datos.nota.length > 30 ? '&hellip;' : '') + '</span>';
+  estadoEl.innerHTML = html;
+  const btnH = document.querySelector('#ctrl-' + id + ' .toggle-btn');
+  const notaEl = document.getElementById('nota-' + id);
+  const starsEl = document.getElementById('stars-' + id);
+  if (btnH) { btnH.textContent = datos.hecha ? 'Sí ✓' : 'No'; btnH.className = 'toggle-btn' + (datos.hecha ? ' activo-hecha' : ''); }
+  if (notaEl && document.activeElement !== notaEl) notaEl.value = datos.nota || '';
+  if (starsEl) starsEl.querySelectorAll('.estrella').forEach((s, i) => s.classList.toggle('activa', i < (datos.estrellas || 0)));
+}
+
+async function guardarRuta(id, campo, valor) {
+  window._estadoRutas[id] = window._estadoRutas[id] || {};
+  window._estadoRutas[id][campo] = valor;
+  await setDoc(docRefRutas, window._estadoRutas);
+}
+
+window.toggleRuta = async function(id, btn) {
+  if (!window._modoEditor) return;
+  await guardarRuta(id, 'hecha', !(window._estadoRutas[id] || {}).hecha);
+};
+window.setEstrellasRuta = async function(id, n) {
+  if (!window._modoEditor) return;
+  const actual = (window._estadoRutas[id] || {}).estrellas;
+  await guardarRuta(id, 'estrellas', actual === n ? 0 : n);
+};
+window.setNotaRuta = async function(id, texto) {
+  if (!window._modoEditor) return;
+  await guardarRuta(id, 'nota', texto);
+};
 </script>
 
 <script>
 window._modoEditor = false;
-const CLAVE = '6131';
-
-function abrirModal() {
-  document.getElementById('modal-pwd').classList.add('visible');
-  setTimeout(() => document.getElementById('pwd-input').focus(), 100);
-}
-function cerrarModal() {
-  document.getElementById('modal-pwd').classList.remove('visible');
-  document.getElementById('pwd-input').value = '';
-  document.getElementById('pwd-error').textContent = '';
-}
-function verificarPwd() {
-  const val = document.getElementById('pwd-input').value;
-  if (val === CLAVE) { cerrarModal(); activarEditor(); }
-  else { document.getElementById('pwd-error').textContent = 'Contraseña incorrecta'; document.getElementById('pwd-input').value = ''; document.getElementById('pwd-input').focus(); }
-}
-document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') verificarPwd(); if (e.key === 'Escape') cerrarModal(); });
-document.getElementById('modal-pwd').addEventListener('click', e => { if (e.target === document.getElementById('modal-pwd')) cerrarModal(); });
 
 function activarEditor() {
   window._modoEditor = true;
