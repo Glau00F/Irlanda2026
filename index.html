@@ -14,7 +14,7 @@
 :root{--verde:#2d5a3d;--verde-claro:#e8f0eb;--verde-medio:#4a7c5f;--dorado:#c8933a;--dorado-claro:#fdf3e3;--gris:#f5f4f0;--gris-borde:#ddd9d0;--texto:#1a1a18;--texto-suave:#5a5850;--blanco:#fafaf8}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--blanco);color:var(--texto);font-size:15px;line-height:1.6}
-header{background:var(--verde);color:white;padding:2.5rem 1.5rem 2rem;text-align:center}
+header{background:var(--verde);color:white;padding:2.5rem 1.5rem 2rem;text-align:center;position:relative}
 header h1{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:600;letter-spacing:-0.5px}
 header h1 em{font-style:italic;font-weight:400;color:#a8d4b8}
 header p.subtitulo{margin-top:0.5rem;font-size:0.9rem;opacity:0.7;letter-spacing:1.5px;text-transform:uppercase}
@@ -81,14 +81,80 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 .tl-fecha{font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--texto-suave)}
 .tl-tit{font-size:0.92rem;font-weight:500}
 .tl-sub{font-size:0.8rem;color:var(--texto-suave);margin-top:1px}
+
+/* ── EDITOR ── */
+.btn-editor-acceso{position:absolute;bottom:0.6rem;right:0.8rem;background:rgba(255,255,255,0.15);border:none;color:rgba(255,255,255,0.4);font-size:0.7rem;padding:3px 8px;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-editor-acceso:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.25)}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.visible{display:flex}
+.modal{background:white;border-radius:16px;padding:2rem;width:90%;max-width:320px;text-align:center}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:1rem}
+.modal input{width:100%;border:1px solid var(--gris-borde);border-radius:8px;padding:0.7rem 1rem;font-size:1.1rem;text-align:center;letter-spacing:4px;font-family:'DM Sans',sans-serif;outline:none}
+.modal input:focus{border-color:var(--verde)}
+.modal-btns{display:flex;gap:0.5rem;margin-top:1rem}
+.btn-cancelar{flex:1;padding:0.7rem;border:1px solid var(--gris-borde);border-radius:8px;background:white;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-entrar{flex:1;padding:0.7rem;border:none;border-radius:8px;background:var(--verde);color:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
+.modal-error{color:#c0392b;font-size:0.8rem;margin-top:0.5rem;min-height:1.2em}
+
+.barra-editor{display:none;background:#1a1a18;color:white;padding:0.6rem 1rem;font-size:0.8rem;align-items:center;justify-content:space-between;position:sticky;top:45px;z-index:99}
+.barra-editor.visible{display:flex}
+.barra-editor span{opacity:0.7}
+.btn-salir-editor{background:rgba(255,255,255,0.15);border:none;color:white;padding:4px 12px;border-radius:10px;cursor:pointer;font-size:0.75rem;font-family:'DM Sans',sans-serif}
+
+/* controles inline del restaurante */
+.rest-controles{display:none;margin-top:0.5rem;padding:0.5rem;background:var(--gris);border-radius:8px;gap:0.5rem;flex-direction:column}
+.rest-controles.visible{display:flex}
+.ctrl-fila{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
+.ctrl-label{font-size:0.75rem;color:var(--texto-suave);min-width:70px}
+.toggle-btn{padding:3px 12px;border-radius:20px;border:1px solid var(--gris-borde);background:white;font-size:0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.toggle-btn.activo-reservado{background:#e8f0eb;border-color:#4a7c5f;color:#2d5a3d;font-weight:500}
+.toggle-btn.activo-visitado{background:#e8f4ec;border-color:#2d5a3d;color:#2d5a3d;font-weight:500}
+.estrellas{display:flex;gap:2px}
+.estrella{font-size:1.1rem;cursor:pointer;opacity:0.3;transition:opacity 0.1s}
+.estrella.activa{opacity:1}
+.nota-input{width:100%;border:1px solid var(--gris-borde);border-radius:6px;padding:4px 8px;font-size:0.78rem;font-family:'DM Sans',sans-serif;resize:none;background:white;outline:none}
+.nota-input:focus{border-color:var(--verde)}
+
+/* insignias de estado visibles para todos */
+.rest-estado{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
+.badge-reservado{font-size:0.7rem;padding:2px 8px;border-radius:10px;background:#e8f0eb;color:#2d5a3d;border:1px solid #b8d4c0;font-weight:500}
+.badge-visitado{font-size:0.7rem;padding:2px 8px;border-radius:10px;background:#2d5a3d;color:white;font-weight:500}
+.badge-nota{font-size:0.7rem;padding:2px 8px;border-radius:10px;background:var(--dorado-claro);color:#8a5a1a;border:1px solid #e8d4a8}
+.estrellas-mini{font-size:0.8rem;letter-spacing:-1px}
+
+.guardando{font-size:0.7rem;color:var(--texto-suave);margin-left:4px;opacity:0}
+.guardando.visible{opacity:1}
+
 @media(max-width:500px){header h1{font-size:1.8rem}nav button{padding:0.8rem 0.9rem;font-size:0.78rem}main{padding:1rem 0.75rem 3rem}}
 </style>
 </head>
 <body>
+
+<!-- Modal contraseña -->
+<div class="modal-overlay" id="modal-pwd">
+  <div class="modal">
+    <h3>Modo editor</h3>
+    <input type="password" id="pwd-input" placeholder="····" maxlength="10" inputmode="numeric">
+    <div class="modal-error" id="pwd-error"></div>
+    <div class="modal-btns">
+      <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-entrar" onclick="verificarPwd()">Entrar</button>
+    </div>
+  </div>
+</div>
+
 <header>
 <h1>Irlanda <em>&middot; Agosto 2026</em></h1>
 <p class="subtitulo">4 &ndash; 18 de agosto &nbsp;&middot;&nbsp; Claregalway, Galway &amp; Dubl&iacute;n</p>
+<button class="btn-editor-acceso" onclick="abrirModal()">&#9998;</button>
 </header>
+
+<div class="barra-editor" id="barra-editor">
+  <span>✏️ Modo editor activo</span>
+  <button class="btn-salir-editor" onclick="salirEditor()">Salir</button>
+</div>
+
 <nav id="nav">
 <button class="activo" onclick="mostrarVista('calendario',this)">Calendario</button>
 <button onclick="mostrarVista('resumen',this)">Resumen</button>
@@ -108,12 +174,38 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">2</div><div class="dia-info"><div class="dia-fecha">Mi&eacute;rcoles &middot; 5 agosto</div><div class="dia-titulo">Devolver coche &middot; Galway ciudad</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Devolver el coche alquilado en Galway antes de las <strong>10:30</strong>. D&iacute;a paseando por Galway: Eyre Square, Spanish Arch, Quay Street, el r&iacute;o Corrib.</p><div class="chips" style="margin-top:0.6rem"><span class="chip cultura">Eyre Square</span><span class="chip cultura">Spanish Arch</span><span class="chip gastronomia">Quay Street</span></div></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer</div><div class="restaurante"><div class="rest-icono">&#127869;</div><div class="rest-info"><div class="rest-nombre">Ard Bia at Nimmos</div><div class="rest-desc">Junto al Spanish Arch. Cocina irlandesa con ingredientes locales. Buenas opciones sin gluten.</div><a class="btn-mapa" href="https://maps.google.com/?q=Ard+Bia+at+Nimmos+Galway" target="_blank">&#128205; Google Maps</a></div></div><div class="restaurante"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">An P&uacute;c&aacute;n</div><div class="rest-desc">Gastropub tradicional con m&uacute;sica en vivo. Buena opci&oacute;n para cenar.</div><a class="btn-mapa" href="https://maps.google.com/?q=An+Pucan+Galway" target="_blank">&#128205; Google Maps</a></div></div></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Devolver el coche alquilado en Galway antes de las <strong>10:30</strong>. D&iacute;a paseando por Galway: Eyre Square, Spanish Arch, Quay Street, el r&iacute;o Corrib.</p><div class="chips" style="margin-top:0.6rem"><span class="chip cultura">Eyre Square</span><span class="chip cultura">Spanish Arch</span><span class="chip gastronomia">Quay Street</span></div></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer</div>
+<div class="restaurante" data-id="ard-bia"><div class="rest-icono">&#127869;</div><div class="rest-info"><div class="rest-nombre">Ard Bia at Nimmos</div><div class="rest-desc">Junto al Spanish Arch. Cocina irlandesa con ingredientes locales. Buenas opciones sin gluten.</div><div class="rest-estado" id="estado-ard-bia"></div><a class="btn-mapa" href="https://maps.google.com/?q=Ard+Bia+at+Nimmos+Galway" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-ard-bia">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('ard-bia','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('ard-bia','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-ard-bia"><span class="estrella" onclick="setEstrellas('ard-bia',1)">★</span><span class="estrella" onclick="setEstrellas('ard-bia',2)">★</span><span class="estrella" onclick="setEstrellas('ard-bia',3)">★</span><span class="estrella" onclick="setEstrellas('ard-bia',4)">★</span><span class="estrella" onclick="setEstrellas('ard-bia',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('ard-bia',this.value)" id="nota-ard-bia"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="an-pucan"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">An P&uacute;c&aacute;n</div><div class="rest-desc">Gastropub tradicional con m&uacute;sica en vivo. Buena opci&oacute;n para cenar.</div><div class="rest-estado" id="estado-an-pucan"></div><a class="btn-mapa" href="https://maps.google.com/?q=An+Pucan+Galway" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-an-pucan">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('an-pucan','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('an-pucan','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-an-pucan"><span class="estrella" onclick="setEstrellas('an-pucan',1)">★</span><span class="estrella" onclick="setEstrellas('an-pucan',2)">★</span><span class="estrella" onclick="setEstrellas('an-pucan',3)">★</span><span class="estrella" onclick="setEstrellas('an-pucan',4)">★</span><span class="estrella" onclick="setEstrellas('an-pucan',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('an-pucan',this.value)" id="nota-an-pucan"></textarea></div>
+</div></div></div>
+</div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">3</div><div class="dia-info"><div class="dia-fecha">Jueves &middot; 6 agosto</div><div class="dia-titulo">Connemara: Diamond Hill + Kylemore</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway. Ruta circular de Diamond Hill (3&ndash;7 km, senderos bien se&ntilde;alizados para todos los niveles). Despu&eacute;s visita a la Abad&iacute;a de Kylemore (abre a las 10:00).</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Diamond Hill</span><span class="chip cultura">Kylemore Abbey</span></div></div><div class="seccion"><div class="seccion-titulo">Ubicaciones</div><a class="btn-mapa" href="https://maps.google.com/?cid=7872932414093034851" target="_blank">&#128205; Diamond Hill</a>&nbsp;<a class="btn-mapa" href="https://maps.google.com/?cid=17412239052951531945" target="_blank">&#128205; Kylemore Abbey</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Clifden, de camino)</div><div class="restaurante"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">Guy's Seafood Bar</div><div class="rest-desc">Marisco fresco, ambiente de pub. Muy bien valorado. Clifden. Abre a las 12:00.</div><a class="btn-mapa" href="https://maps.google.com/?q=Guys+Seafood+Bar+Clifden" target="_blank">&#128205; Google Maps</a></div></div><div class="restaurante"><div class="rest-icono">&#127860;</div><div class="rest-info"><div class="rest-nombre">The Willow Tree</div><div class="rest-desc">Cocina irlandesa con toques asi&aacute;ticos. Excelente relaci&oacute;n calidad-precio. Clifden.</div><a class="btn-mapa" href="https://maps.google.com/?q=Willow+Tree+Restaurant+Clifden" target="_blank">&#128205; Google Maps</a></div></div></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway. Ruta circular de Diamond Hill (3&ndash;7 km, senderos bien se&ntilde;alizados para todos los niveles). Despu&eacute;s visita a la Abad&iacute;a de Kylemore (abre a las 10:00).</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Diamond Hill</span><span class="chip cultura">Kylemore Abbey</span></div></div><div class="seccion"><div class="seccion-titulo">Ubicaciones</div><a class="btn-mapa" href="https://maps.google.com/?cid=7872932414093034851" target="_blank">&#128205; Diamond Hill</a>&nbsp;<a class="btn-mapa" href="https://maps.google.com/?cid=17412239052951531945" target="_blank">&#128205; Kylemore Abbey</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Clifden, de camino)</div>
+<div class="restaurante" data-id="guys-seafood"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">Guy's Seafood Bar</div><div class="rest-desc">Marisco fresco, ambiente de pub. Muy bien valorado. Clifden. Abre a las 12:00.</div><div class="rest-estado" id="estado-guys-seafood"></div><a class="btn-mapa" href="https://maps.google.com/?q=Guys+Seafood+Bar+Clifden" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-guys-seafood">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('guys-seafood','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('guys-seafood','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-guys-seafood"><span class="estrella" onclick="setEstrellas('guys-seafood',1)">★</span><span class="estrella" onclick="setEstrellas('guys-seafood',2)">★</span><span class="estrella" onclick="setEstrellas('guys-seafood',3)">★</span><span class="estrella" onclick="setEstrellas('guys-seafood',4)">★</span><span class="estrella" onclick="setEstrellas('guys-seafood',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('guys-seafood',this.value)" id="nota-guys-seafood"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="willow-tree"><div class="rest-icono">&#127860;</div><div class="rest-info"><div class="rest-nombre">The Willow Tree</div><div class="rest-desc">Cocina irlandesa con toques asi&aacute;ticos. Excelente relaci&oacute;n calidad-precio. Clifden.</div><div class="rest-estado" id="estado-willow-tree"></div><a class="btn-mapa" href="https://maps.google.com/?q=Willow+Tree+Restaurant+Clifden" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-willow-tree">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('willow-tree','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('willow-tree','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-willow-tree"><span class="estrella" onclick="setEstrellas('willow-tree',1)">★</span><span class="estrella" onclick="setEstrellas('willow-tree',2)">★</span><span class="estrella" onclick="setEstrellas('willow-tree',3)">★</span><span class="estrella" onclick="setEstrellas('willow-tree',4)">★</span><span class="estrella" onclick="setEstrellas('willow-tree',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('willow-tree',this.value)" id="nota-willow-tree"></textarea></div>
+</div></div></div>
+</div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
@@ -123,17 +215,48 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">5</div><div class="dia-info"><div class="dia-fecha">S&aacute;bado &middot; 8 agosto</div><div class="dia-titulo">Westport, County Mayo</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1h 15min desde Claregalway. Pueblo con mucho encanto en la bah&iacute;a de Clew. Paseo por el puerto y el centro hist&oacute;rico.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Paseo por el puerto</span><span class="chip cultura">Centro hist&oacute;rico</span><span class="chip">Bah&iacute;a de Clew</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579310720" target="_blank">&#128205; Westport</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde cenar</div><div class="restaurante"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Sage Restaurant</div><div class="rest-desc">Cocina irlandesa creativa. Uno de los mejores de Westport. Desde las 17:30.</div><div class="rest-aviso">&#9888;&#65039; Reservar con antelaci&oacute;n. Cerrado lunes y domingos.</div><a class="btn-mapa" href="https://maps.google.com/?q=Sage+Restaurant+Westport" target="_blank">&#128205; Google Maps</a></div></div><div class="restaurante"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">An Port M&oacute;r</div><div class="rest-desc">Mariscos y cocina irlandesa cl&aacute;sica. Desde las 17:00. Cerrado lunes y domingos.</div><a class="btn-mapa" href="https://maps.google.com/?q=An+Port+Mor+Westport" target="_blank">&#128205; Google Maps</a></div></div></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1h 15min desde Claregalway. Pueblo con mucho encanto en la bah&iacute;a de Clew. Paseo por el puerto y el centro hist&oacute;rico.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Paseo por el puerto</span><span class="chip cultura">Centro hist&oacute;rico</span><span class="chip">Bah&iacute;a de Clew</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579310720" target="_blank">&#128205; Westport</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde cenar</div>
+<div class="restaurante" data-id="sage-westport"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Sage Restaurant</div><div class="rest-desc">Cocina irlandesa creativa. Uno de los mejores de Westport. Desde las 17:30.</div><div class="rest-aviso">&#9888;&#65039; Reservar con antelaci&oacute;n. Cerrado lunes y domingos.</div><div class="rest-estado" id="estado-sage-westport"></div><a class="btn-mapa" href="https://maps.google.com/?q=Sage+Restaurant+Westport" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-sage-westport">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('sage-westport','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('sage-westport','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-sage-westport"><span class="estrella" onclick="setEstrellas('sage-westport',1)">★</span><span class="estrella" onclick="setEstrellas('sage-westport',2)">★</span><span class="estrella" onclick="setEstrellas('sage-westport',3)">★</span><span class="estrella" onclick="setEstrellas('sage-westport',4)">★</span><span class="estrella" onclick="setEstrellas('sage-westport',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('sage-westport',this.value)" id="nota-sage-westport"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="an-port-mor"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">An Port M&oacute;r</div><div class="rest-desc">Mariscos y cocina irlandesa cl&aacute;sica. Desde las 17:00. Cerrado lunes y domingos.</div><div class="rest-estado" id="estado-an-port-mor"></div><a class="btn-mapa" href="https://maps.google.com/?q=An+Port+Mor+Westport" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-an-port-mor">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('an-port-mor','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('an-port-mor','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-an-port-mor"><span class="estrella" onclick="setEstrellas('an-port-mor',1)">★</span><span class="estrella" onclick="setEstrellas('an-port-mor',2)">★</span><span class="estrella" onclick="setEstrellas('an-port-mor',3)">★</span><span class="estrella" onclick="setEstrellas('an-port-mor',4)">★</span><span class="estrella" onclick="setEstrellas('an-port-mor',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('an-port-mor',this.value)" id="nota-an-port-mor"></textarea></div>
+</div></div></div>
+</div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num tranquilo">6</div><div class="dia-info"><div class="dia-fecha">Domingo &middot; 9 agosto</div><div class="dia-titulo">Salthill y paseo mar&iacute;timo</div></div><span class="dia-badge badge-tranquilo">Tranquilo</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Paseo por el Salthill Prom, con vistas a la bah&iacute;a de Galway. Hay una tradici&oacute;n local: dar una patada a la pared al final del paseo para traer buena suerte.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Paseo mar&iacute;timo</span><span class="chip gastronomia">Pubs</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=8315740016763010211" target="_blank">&#128205; Salthill Prom</a></div><div class="seccion"><div class="seccion-titulo">Para la tarde / noche</div><div class="restaurante"><div class="rest-icono">&#127926;</div><div class="rest-info"><div class="rest-nombre">O'Connor's Famous Pub</div><div class="rest-desc">M&uacute;sica tradicional irlandesa en vivo desde las 19:30. Solo bebidas, no es restaurante.</div><a class="btn-mapa" href="https://maps.google.com/?q=OConnors+Famous+Pub+Salthill+Galway" target="_blank">&#128205; Google Maps</a></div></div></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Paseo por el Salthill Prom, con vistas a la bah&iacute;a de Galway. Hay una tradici&oacute;n local: dar una patada a la pared al final del paseo para traer buena suerte.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Paseo mar&iacute;timo</span><span class="chip gastronomia">Pubs</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=8315740016763010211" target="_blank">&#128205; Salthill Prom</a></div><div class="seccion"><div class="seccion-titulo">Para la tarde / noche</div>
+<div class="restaurante" data-id="oconnors-pub"><div class="rest-icono">&#127926;</div><div class="rest-info"><div class="rest-nombre">O'Connor's Famous Pub</div><div class="rest-desc">M&uacute;sica tradicional irlandesa en vivo desde las 19:30. Solo bebidas, no es restaurante.</div><div class="rest-estado" id="estado-oconnors-pub"></div><a class="btn-mapa" href="https://maps.google.com/?q=OConnors+Famous+Pub+Salthill+Galway" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-oconnors-pub">
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('oconnors-pub','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-oconnors-pub"><span class="estrella" onclick="setEstrellas('oconnors-pub',1)">★</span><span class="estrella" onclick="setEstrellas('oconnors-pub',2)">★</span><span class="estrella" onclick="setEstrellas('oconnors-pub',3)">★</span><span class="estrella" onclick="setEstrellas('oconnors-pub',4)">★</span><span class="estrella" onclick="setEstrellas('oconnors-pub',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('oconnors-pub',this.value)" id="nota-oconnors-pub"></textarea></div>
+</div></div></div>
+</div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">7</div><div class="dia-info"><div class="dia-fecha">Lunes &middot; 10 agosto</div><div class="dia-titulo">Killary Fjord &middot; Leenane</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway. El &uacute;nico fiordo de Irlanda. Paseo suave a orillas del agua. El pueblo de Leenane es el escenario de la pel&iacute;cula <em>The Field</em>.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Camino del Fiordo</span><span class="chip cultura">Leenane</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579319824" target="_blank">&#128205; Leenane / Killary</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Leenane)</div><div class="restaurante"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">Hamilton's Bar &amp; Restaurant</div><div class="rest-desc">Pub tradicional con vistas al fiordo. Buena comida casera a precios razonables.</div><a class="btn-mapa" href="https://maps.google.com/?q=Hamiltons+Bar+Leenane" target="_blank">&#128205; Google Maps</a></div></div><div class="restaurante"><div class="rest-icono">&#127916;</div><div class="rest-info"><div class="rest-nombre">Gaynor's Bar (The Field Bar)</div><div class="rest-desc">El pub de la pel&iacute;cula <em>The Field</em>. Comida solo hasta las 15:00. Para tomar algo y ver el ambiente.</div><a class="btn-mapa" href="https://maps.google.com/?q=Gaynors+Bar+Leenane" target="_blank">&#128205; Google Maps</a></div></div></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway. El &uacute;nico fiordo de Irlanda. Paseo suave a orillas del agua. El pueblo de Leenane es el escenario de la pel&iacute;cula <em>The Field</em>.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Camino del Fiordo</span><span class="chip cultura">Leenane</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=720795471579319824" target="_blank">&#128205; Leenane / Killary</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Leenane)</div>
+<div class="restaurante" data-id="hamiltons-bar"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">Hamilton's Bar &amp; Restaurant</div><div class="rest-desc">Pub tradicional con vistas al fiordo. Buena comida casera a precios razonables.</div><div class="rest-estado" id="estado-hamiltons-bar"></div><a class="btn-mapa" href="https://maps.google.com/?q=Hamiltons+Bar+Leenane" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-hamiltons-bar">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('hamiltons-bar','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('hamiltons-bar','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-hamiltons-bar"><span class="estrella" onclick="setEstrellas('hamiltons-bar',1)">★</span><span class="estrella" onclick="setEstrellas('hamiltons-bar',2)">★</span><span class="estrella" onclick="setEstrellas('hamiltons-bar',3)">★</span><span class="estrella" onclick="setEstrellas('hamiltons-bar',4)">★</span><span class="estrella" onclick="setEstrellas('hamiltons-bar',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('hamiltons-bar',this.value)" id="nota-hamiltons-bar"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="gaynors-bar"><div class="rest-icono">&#127916;</div><div class="rest-info"><div class="rest-nombre">Gaynor's Bar (The Field Bar)</div><div class="rest-desc">El pub de la pel&iacute;cula <em>The Field</em>. Comida solo hasta las 15:00. Para tomar algo y ver el ambiente.</div><div class="rest-estado" id="estado-gaynors-bar"></div><a class="btn-mapa" href="https://maps.google.com/?q=Gaynors+Bar+Leenane" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-gaynors-bar">
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('gaynors-bar','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-gaynors-bar"><span class="estrella" onclick="setEstrellas('gaynors-bar',1)">★</span><span class="estrella" onclick="setEstrellas('gaynors-bar',2)">★</span><span class="estrella" onclick="setEstrellas('gaynors-bar',3)">★</span><span class="estrella" onclick="setEstrellas('gaynors-bar',4)">★</span><span class="estrella" onclick="setEstrellas('gaynors-bar',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('gaynors-bar',this.value)" id="nota-gaynors-bar"></textarea></div>
+</div></div></div>
+</div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
@@ -148,12 +271,31 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">10</div><div class="dia-info"><div class="dia-fecha">Jueves &middot; 13 agosto</div><div class="dia-titulo">Acantilados de Moher &middot; El Burren</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1h 30min desde Claregalway. Parada en el Dolmen de Poulnabrone (El Burren, 5.000 a&ntilde;os, entrada libre) de camino. Los acantilados abren a las 8:00 &mdash; mejor llegar antes de las 10:00 en agosto.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Acantilados de Moher</span><span class="chip cultura">Dolmen de Poulnabrone</span><span class="chip cultura">El Burren</span></div><div class="alerta" style="margin-top:0.8rem">&#9888;&#65039; En agosto hay mucha gente. Salir temprano.</div></div><div class="seccion"><div class="seccion-titulo">Ubicaciones</div><a class="btn-mapa" href="https://maps.google.com/?cid=12712382707930902790" target="_blank">&#128205; Acantilados de Moher</a>&nbsp;<a class="btn-mapa" href="https://maps.google.com/?cid=9891057785651171590" target="_blank">&#128205; Poulnabrone Dolmen</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde cenar (Doolin)</div><div class="restaurante"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Russells Seafood Bar</div><div class="rest-desc">Uno de los mejores de la zona. Marisco y cocina irlandesa de nivel. Desde las 17:00.</div><div class="rest-aviso">&#9888;&#65039; Muy popular. Reservar con antelaci&oacute;n.</div><a class="btn-mapa" href="https://maps.google.com/?q=Russells+Seafood+Bar+Doolin" target="_blank">&#128205; Google Maps</a></div></div><div class="restaurante"><div class="rest-icono">&#127860;</div><div class="rest-info"><div class="rest-nombre">Riverside Bistro Doolin</div><div class="rest-desc">Alternativa tranquila y muy bien valorada en Doolin. Desde las 17:00.</div><a class="btn-mapa" href="https://maps.google.com/?q=Riverside+Bistro+Doolin" target="_blank">&#128205; Google Maps</a></div></div></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1h 30min desde Claregalway. Parada en el Dolmen de Poulnabrone (El Burren, 5.000 a&ntilde;os, entrada libre) de camino. Los acantilados abren a las 8:00 &mdash; mejor llegar antes de las 10:00 en agosto.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Acantilados de Moher</span><span class="chip cultura">Dolmen de Poulnabrone</span><span class="chip cultura">El Burren</span></div><div class="alerta" style="margin-top:0.8rem">&#9888;&#65039; En agosto hay mucha gente. Salir temprano.</div></div><div class="seccion"><div class="seccion-titulo">Ubicaciones</div><a class="btn-mapa" href="https://maps.google.com/?cid=12712382707930902790" target="_blank">&#128205; Acantilados de Moher</a>&nbsp;<a class="btn-mapa" href="https://maps.google.com/?cid=9891057785651171590" target="_blank">&#128205; Poulnabrone Dolmen</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde cenar (Doolin)</div>
+<div class="restaurante" data-id="russells-doolin"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Russells Seafood Bar</div><div class="rest-desc">Uno de los mejores de la zona. Marisco y cocina irlandesa de nivel. Desde las 17:00.</div><div class="rest-aviso">&#9888;&#65039; Muy popular. Reservar con antelaci&oacute;n.</div><div class="rest-estado" id="estado-russells-doolin"></div><a class="btn-mapa" href="https://maps.google.com/?q=Russells+Seafood+Bar+Doolin" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-russells-doolin">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('russells-doolin','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('russells-doolin','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-russells-doolin"><span class="estrella" onclick="setEstrellas('russells-doolin',1)">★</span><span class="estrella" onclick="setEstrellas('russells-doolin',2)">★</span><span class="estrella" onclick="setEstrellas('russells-doolin',3)">★</span><span class="estrella" onclick="setEstrellas('russells-doolin',4)">★</span><span class="estrella" onclick="setEstrellas('russells-doolin',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('russells-doolin',this.value)" id="nota-russells-doolin"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="riverside-doolin"><div class="rest-icono">&#127860;</div><div class="rest-info"><div class="rest-nombre">Riverside Bistro Doolin</div><div class="rest-desc">Alternativa tranquila y muy bien valorada en Doolin. Desde las 17:00.</div><div class="rest-estado" id="estado-riverside-doolin"></div><a class="btn-mapa" href="https://maps.google.com/?q=Riverside+Bistro+Doolin" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-riverside-doolin">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('riverside-doolin','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('riverside-doolin','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-riverside-doolin"><span class="estrella" onclick="setEstrellas('riverside-doolin',1)">★</span><span class="estrella" onclick="setEstrellas('riverside-doolin',2)">★</span><span class="estrella" onclick="setEstrellas('riverside-doolin',3)">★</span><span class="estrella" onclick="setEstrellas('riverside-doolin',4)">★</span><span class="estrella" onclick="setEstrellas('riverside-doolin',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('riverside-doolin',this.value)" id="nota-riverside-doolin"></textarea></div>
+</div></div></div>
+</div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num">11</div><div class="dia-info"><div class="dia-fecha">Viernes &middot; 14 agosto</div><div class="dia-titulo">Lough Key Forest Park</div></div><span class="dia-badge badge-excursion">Excursi&oacute;n</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway (direcci&oacute;n Roscommon). Parque forestal con rutas suaves entre bosques y lago. Menos tur&iacute;stico, muy tranquilo. Abre a las 10:00.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Rutas forestales</span><span class="chip">Lago Lough Key</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=1381215386157358350" target="_blank">&#128205; Lough Key Forest Park</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Boyle)</div><div class="restaurante"><div class="rest-icono">&#9749;</div><div class="rest-info"><div class="rest-nombre">Lovage at the Gate Lodge Caf&eacute;</div><div class="rest-desc">Caf&eacute;-bistr&oacute; junto al r&iacute;o en Boyle. Perfecto para el almuerzo. Abierto hasta las 17:00.</div><a class="btn-mapa" href="https://maps.google.com/?q=Lovage+Gate+Lodge+Cafe+Boyle" target="_blank">&#128205; Google Maps</a></div></div></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>~1 hora desde Claregalway (direcci&oacute;n Roscommon). Parque forestal con rutas suaves entre bosques y lago. Menos tur&iacute;stico, muy tranquilo. Abre a las 10:00.</p><div class="chips" style="margin-top:0.6rem"><span class="chip senderismo">Rutas forestales</span><span class="chip">Lago Lough Key</span></div><a class="btn-mapa" style="margin-top:0.6rem;display:inline-flex" href="https://maps.google.com/?cid=1381215386157358350" target="_blank">&#128205; Lough Key Forest Park</a></div><div class="seccion"><div class="seccion-titulo">D&oacute;nde comer (Boyle)</div>
+<div class="restaurante" data-id="lovage-boyle"><div class="rest-icono">&#9749;</div><div class="rest-info"><div class="rest-nombre">Lovage at the Gate Lodge Caf&eacute;</div><div class="rest-desc">Caf&eacute;-bistr&oacute; junto al r&iacute;o en Boyle. Perfecto para el almuerzo. Abierto hasta las 17:00.</div><div class="rest-estado" id="estado-lovage-boyle"></div><a class="btn-mapa" href="https://maps.google.com/?q=Lovage+Gate+Lodge+Cafe+Boyle" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-lovage-boyle">
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('lovage-boyle','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-lovage-boyle"><span class="estrella" onclick="setEstrellas('lovage-boyle',1)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',2)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',3)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',4)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('lovage-boyle',this.value)" id="nota-lovage-boyle"></textarea></div>
+</div></div></div>
+</div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
@@ -163,7 +305,14 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 <div class="dia-card" onclick="toggleDia(this)">
 <div class="dia-header"><div class="dia-num tranquilo">13</div><div class="dia-info"><div class="dia-fecha">Domingo &middot; 16 agosto</div><div class="dia-titulo">&Uacute;ltimas compras &middot; Cena de despedida</div></div><span class="dia-badge badge-tranquilo">Tranquilo</span><span class="chevron">&#9660;</span></div>
-<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>D&iacute;a tranquilo en Galway. Compras de recuerdos (lanas, cer&aacute;mica, whiskey). Cena de despedida.</p><div class="chips" style="margin-top:0.6rem"><span class="chip gastronomia">Compras en Galway</span><span class="chip gastronomia">Cena de despedida</span></div></div><div class="seccion"><div class="seccion-titulo">Para la cena</div><div class="restaurante"><div class="rest-icono">&#127869;</div><div class="rest-info"><div class="rest-nombre">Dela Restaurant</div><div class="rest-desc">Brunch y cenas excelentes. Muy buenas opciones sin gluten. Favorito de los locales en Galway.</div><a class="btn-mapa" href="https://maps.google.com/?q=Dela+Restaurant+Galway" target="_blank">&#128205; Google Maps</a></div></div></div></div>
+<div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>D&iacute;a tranquilo en Galway. Compras de recuerdos (lanas, cer&aacute;mica, whiskey). Cena de despedida.</p><div class="chips" style="margin-top:0.6rem"><span class="chip gastronomia">Compras en Galway</span><span class="chip gastronomia">Cena de despedida</span></div></div><div class="seccion"><div class="seccion-titulo">Para la cena</div>
+<div class="restaurante" data-id="dela-galway"><div class="rest-icono">&#127869;</div><div class="rest-info"><div class="rest-nombre">Dela Restaurant</div><div class="rest-desc">Brunch y cenas excelentes. Muy buenas opciones sin gluten. Favorito de los locales en Galway.</div><div class="rest-estado" id="estado-dela-galway"></div><a class="btn-mapa" href="https://maps.google.com/?q=Dela+Restaurant+Galway" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-dela-galway">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('dela-galway','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('dela-galway','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-dela-galway"><span class="estrella" onclick="setEstrellas('dela-galway',1)">★</span><span class="estrella" onclick="setEstrellas('dela-galway',2)">★</span><span class="estrella" onclick="setEstrellas('dela-galway',3)">★</span><span class="estrella" onclick="setEstrellas('dela-galway',4)">★</span><span class="estrella" onclick="setEstrellas('dela-galway',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('dela-galway',this.value)" id="nota-dela-galway"></textarea></div>
+</div></div></div>
+</div></div>
 </div>
 
 <div class="dia-card" onclick="toggleDia(this)">
@@ -176,7 +325,7 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 <div class="dia-body"><div class="seccion"><div class="seccion-titulo">Plan del d&iacute;a</div><p>Vuelo desde el aeropuerto de Dubl&iacute;n a las <strong>12:30</strong>. Llegar al aeropuerto con al menos 2 horas de antelaci&oacute;n (antes de las 10:30). Devolver el coche de alquiler antes de entrar al terminal.</p><div class="chips" style="margin-top:0.6rem"><span class="chip">Check-out hotel</span><span class="chip ferry">Aeropuerto Dubl&iacute;n</span><span class="chip">Vuelo 12:30</span></div></div></div>
 </div>
 
-</div>
+</div><!-- fin vista-calendario -->
 
 <!-- RESUMEN -->
 <div class="vista" id="vista-resumen">
@@ -225,29 +374,86 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 <div class="alerta" style="margin-bottom:1.5rem">&#9888;&#65039; En agosto los restaurantes se llenan. <strong>Russells en Doolin</strong> y <strong>Sage en Westport</strong> especialmente &mdash; reservar con al menos una semana de antelaci&oacute;n.</div>
 
 <div class="seccion-titulo">Galway ciudad</div>
-<div class="restaurante"><div class="rest-icono">&#127869;</div><div class="rest-info"><div class="rest-nombre">Ard Bia at Nimmos</div><div class="rest-desc">Junto al Spanish Arch. Cocina irlandesa local. Buenas opciones sin gluten. Comidas y cenas.</div><a class="btn-mapa" href="https://maps.google.com/?q=Ard+Bia+at+Nimmos+Galway" target="_blank">&#128205; Google Maps</a></div></div>
-<div class="restaurante"><div class="rest-icono">&#127859;</div><div class="rest-info"><div class="rest-nombre">Dela Restaurant</div><div class="rest-desc">Brunch y cenas. Excelente sin gluten. Favorito de los locales. Ju&ndash;S&aacute; tambi&eacute;n cenas.</div><a class="btn-mapa" href="https://maps.google.com/?q=Dela+Restaurant+Galway" target="_blank">&#128205; Google Maps</a></div></div>
-<div class="restaurante"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">An P&uacute;c&aacute;n</div><div class="rest-desc">Gastropub con m&uacute;sica tradicional en vivo. Comidas y cenas.</div><a class="btn-mapa" href="https://maps.google.com/?q=An+Pucan+Galway" target="_blank">&#128205; Google Maps</a></div></div>
-<div class="restaurante"><div class="rest-icono">&#127926;</div><div class="rest-info"><div class="rest-nombre">O'Connor's Famous Pub (Salthill)</div><div class="rest-desc">Solo bebidas. M&uacute;sica tradicional en vivo desde las 19:30. Ambiente aut&eacute;ntico.</div><a class="btn-mapa" href="https://maps.google.com/?q=OConnors+Famous+Pub+Salthill" target="_blank">&#128205; Google Maps</a></div></div>
+<div class="restaurante" data-id="ard-bia-r"><div class="rest-icono">&#127869;</div><div class="rest-info"><div class="rest-nombre">Ard Bia at Nimmos</div><div class="rest-desc">Junto al Spanish Arch. Cocina irlandesa local. Buenas opciones sin gluten. Comidas y cenas.</div><div class="rest-estado" id="estado-ard-bia-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Ard+Bia+at+Nimmos+Galway" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-ard-bia-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('ard-bia','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('ard-bia','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-ard-bia-r"><span class="estrella" onclick="setEstrellas('ard-bia',1)">★</span><span class="estrella" onclick="setEstrellas('ard-bia',2)">★</span><span class="estrella" onclick="setEstrellas('ard-bia',3)">★</span><span class="estrella" onclick="setEstrellas('ard-bia',4)">★</span><span class="estrella" onclick="setEstrellas('ard-bia',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('ard-bia',this.value)" id="nota-ard-bia-r"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="dela-galway-r"><div class="rest-icono">&#127859;</div><div class="rest-info"><div class="rest-nombre">Dela Restaurant</div><div class="rest-desc">Brunch y cenas. Excelente sin gluten. Favorito de los locales.</div><div class="rest-estado" id="estado-dela-galway-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Dela+Restaurant+Galway" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-dela-galway-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('dela-galway','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('dela-galway','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-dela-galway-r"><span class="estrella" onclick="setEstrellas('dela-galway',1)">★</span><span class="estrella" onclick="setEstrellas('dela-galway',2)">★</span><span class="estrella" onclick="setEstrellas('dela-galway',3)">★</span><span class="estrella" onclick="setEstrellas('dela-galway',4)">★</span><span class="estrella" onclick="setEstrellas('dela-galway',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('dela-galway',this.value)" id="nota-dela-galway-r"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="an-pucan-r"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">An P&uacute;c&aacute;n</div><div class="rest-desc">Gastropub con m&uacute;sica tradicional en vivo.</div><div class="rest-estado" id="estado-an-pucan-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=An+Pucan+Galway" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-an-pucan-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('an-pucan','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('an-pucan','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-an-pucan-r"><span class="estrella" onclick="setEstrellas('an-pucan',1)">★</span><span class="estrella" onclick="setEstrellas('an-pucan',2)">★</span><span class="estrella" onclick="setEstrellas('an-pucan',3)">★</span><span class="estrella" onclick="setEstrellas('an-pucan',4)">★</span><span class="estrella" onclick="setEstrellas('an-pucan',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('an-pucan',this.value)" id="nota-an-pucan-r"></textarea></div>
+</div></div></div>
+<div class="restaurante"><div class="rest-icono">&#127926;</div><div class="rest-info"><div class="rest-nombre">O'Connor's Famous Pub (Salthill)</div><div class="rest-desc">Solo bebidas. M&uacute;sica tradicional en vivo desde las 19:30.</div><div class="rest-estado" id="estado-oconnors-pub-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=OConnors+Famous+Pub+Salthill" target="_blank">&#128205; Google Maps</a></div></div>
 
 <div class="seccion-titulo" style="margin-top:1.5rem">Clifden (Connemara)</div>
-<div class="restaurante"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">Guy's Seafood Bar</div><div class="rest-desc">Marisco fresco en ambiente de pub. Muy bien valorado. Abre a las 12:00.</div><a class="btn-mapa" href="https://maps.google.com/?q=Guys+Seafood+Bar+Clifden" target="_blank">&#128205; Google Maps</a></div></div>
-<div class="restaurante"><div class="rest-icono">&#127860;</div><div class="rest-info"><div class="rest-nombre">The Willow Tree</div><div class="rest-desc">Cocina irlandesa con toques asi&aacute;ticos. Excelente relaci&oacute;n calidad-precio. Abre a las 12:00.</div><a class="btn-mapa" href="https://maps.google.com/?q=Willow+Tree+Restaurant+Clifden" target="_blank">&#128205; Google Maps</a></div></div>
+<div class="restaurante" data-id="guys-seafood-r"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">Guy's Seafood Bar</div><div class="rest-desc">Marisco fresco en ambiente de pub. Abre a las 12:00.</div><div class="rest-estado" id="estado-guys-seafood-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Guys+Seafood+Bar+Clifden" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-guys-seafood-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('guys-seafood','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('guys-seafood','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-guys-seafood-r"><span class="estrella" onclick="setEstrellas('guys-seafood',1)">★</span><span class="estrella" onclick="setEstrellas('guys-seafood',2)">★</span><span class="estrella" onclick="setEstrellas('guys-seafood',3)">★</span><span class="estrella" onclick="setEstrellas('guys-seafood',4)">★</span><span class="estrella" onclick="setEstrellas('guys-seafood',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('guys-seafood',this.value)" id="nota-guys-seafood-r"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="willow-tree-r"><div class="rest-icono">&#127860;</div><div class="rest-info"><div class="rest-nombre">The Willow Tree</div><div class="rest-desc">Cocina irlandesa con toques asi&aacute;ticos. Clifden.</div><div class="rest-estado" id="estado-willow-tree-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Willow+Tree+Restaurant+Clifden" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-willow-tree-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('willow-tree','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('willow-tree','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-willow-tree-r"><span class="estrella" onclick="setEstrellas('willow-tree',1)">★</span><span class="estrella" onclick="setEstrellas('willow-tree',2)">★</span><span class="estrella" onclick="setEstrellas('willow-tree',3)">★</span><span class="estrella" onclick="setEstrellas('willow-tree',4)">★</span><span class="estrella" onclick="setEstrellas('willow-tree',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('willow-tree',this.value)" id="nota-willow-tree-r"></textarea></div>
+</div></div></div>
 
 <div class="seccion-titulo" style="margin-top:1.5rem">Westport (Mayo)</div>
-<div class="restaurante"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Sage Restaurant</div><div class="rest-desc">Cocina irlandesa creativa. Solo cenas (desde 17:30). Cerrado lunes y domingos.</div><div class="rest-aviso">&#9888;&#65039; Reservar con antelaci&oacute;n.</div><a class="btn-mapa" href="https://maps.google.com/?q=Sage+Restaurant+Westport" target="_blank">&#128205; Google Maps</a></div></div>
-<div class="restaurante"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">An Port M&oacute;r</div><div class="rest-desc">Mariscos y cocina irlandesa. Solo cenas (desde 17:00). Cerrado lunes y domingos.</div><a class="btn-mapa" href="https://maps.google.com/?q=An+Port+Mor+Westport" target="_blank">&#128205; Google Maps</a></div></div>
+<div class="restaurante" data-id="sage-westport-r"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Sage Restaurant</div><div class="rest-desc">Cocina irlandesa creativa. Solo cenas (desde 17:30). Cerrado lunes y domingos.</div><div class="rest-aviso">&#9888;&#65039; Reservar con antelaci&oacute;n.</div><div class="rest-estado" id="estado-sage-westport-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Sage+Restaurant+Westport" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-sage-westport-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('sage-westport','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('sage-westport','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-sage-westport-r"><span class="estrella" onclick="setEstrellas('sage-westport',1)">★</span><span class="estrella" onclick="setEstrellas('sage-westport',2)">★</span><span class="estrella" onclick="setEstrellas('sage-westport',3)">★</span><span class="estrella" onclick="setEstrellas('sage-westport',4)">★</span><span class="estrella" onclick="setEstrellas('sage-westport',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('sage-westport',this.value)" id="nota-sage-westport-r"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="an-port-mor-r"><div class="rest-icono">&#129438;</div><div class="rest-info"><div class="rest-nombre">An Port M&oacute;r</div><div class="rest-desc">Mariscos. Solo cenas (desde 17:00). Cerrado lunes y domingos.</div><div class="rest-estado" id="estado-an-port-mor-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=An+Port+Mor+Westport" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-an-port-mor-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('an-port-mor','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('an-port-mor','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-an-port-mor-r"><span class="estrella" onclick="setEstrellas('an-port-mor',1)">★</span><span class="estrella" onclick="setEstrellas('an-port-mor',2)">★</span><span class="estrella" onclick="setEstrellas('an-port-mor',3)">★</span><span class="estrella" onclick="setEstrellas('an-port-mor',4)">★</span><span class="estrella" onclick="setEstrellas('an-port-mor',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('an-port-mor',this.value)" id="nota-an-port-mor-r"></textarea></div>
+</div></div></div>
 
 <div class="seccion-titulo" style="margin-top:1.5rem">Leenane (Killary Fjord)</div>
-<div class="restaurante"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">Hamilton's Bar &amp; Restaurant</div><div class="rest-desc">Pub con vistas al fiordo. Comida casera a buen precio. Abre a las 11:30.</div><a class="btn-mapa" href="https://maps.google.com/?q=Hamiltons+Bar+Leenane" target="_blank">&#128205; Google Maps</a></div></div>
-<div class="restaurante"><div class="rest-icono">&#127916;</div><div class="rest-info"><div class="rest-nombre">Gaynor's Bar (The Field Bar)</div><div class="rest-desc">El pub de la pel&iacute;cula <em>The Field</em>. Solo bocadillos y sopa hasta las 15:00.</div><a class="btn-mapa" href="https://maps.google.com/?q=Gaynors+Bar+Leenane" target="_blank">&#128205; Google Maps</a></div></div>
+<div class="restaurante" data-id="hamiltons-bar-r"><div class="rest-icono">&#127866;</div><div class="rest-info"><div class="rest-nombre">Hamilton's Bar &amp; Restaurant</div><div class="rest-desc">Pub con vistas al fiordo. Comida casera. Abre a las 11:30.</div><div class="rest-estado" id="estado-hamiltons-bar-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Hamiltons+Bar+Leenane" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-hamiltons-bar-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('hamiltons-bar','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-hamiltons-bar-r"><span class="estrella" onclick="setEstrellas('hamiltons-bar',1)">★</span><span class="estrella" onclick="setEstrellas('hamiltons-bar',2)">★</span><span class="estrella" onclick="setEstrellas('hamiltons-bar',3)">★</span><span class="estrella" onclick="setEstrellas('hamiltons-bar',4)">★</span><span class="estrella" onclick="setEstrellas('hamiltons-bar',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('hamiltons-bar',this.value)" id="nota-hamiltons-bar-r"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="gaynors-bar-r"><div class="rest-icono">&#127916;</div><div class="rest-info"><div class="rest-nombre">Gaynor's Bar (The Field Bar)</div><div class="rest-desc">El pub de <em>The Field</em>. Solo bocadillos hasta las 15:00.</div><div class="rest-estado" id="estado-gaynors-bar-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Gaynors+Bar+Leenane" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-gaynors-bar-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('gaynors-bar','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-gaynors-bar-r"><span class="estrella" onclick="setEstrellas('gaynors-bar',1)">★</span><span class="estrella" onclick="setEstrellas('gaynors-bar',2)">★</span><span class="estrella" onclick="setEstrellas('gaynors-bar',3)">★</span><span class="estrella" onclick="setEstrellas('gaynors-bar',4)">★</span><span class="estrella" onclick="setEstrellas('gaynors-bar',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('gaynors-bar',this.value)" id="nota-gaynors-bar-r"></textarea></div>
+</div></div></div>
 
 <div class="seccion-titulo" style="margin-top:1.5rem">Doolin (Clare)</div>
-<div class="restaurante"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Russells Seafood Bar</div><div class="rest-desc">Uno de los mejores de Clare. Marisco de nivel. Desde las 17:00.</div><div class="rest-aviso">&#9888;&#65039; Muy popular &mdash; reservar con bastante antelaci&oacute;n.</div><a class="btn-mapa" href="https://maps.google.com/?q=Russells+Seafood+Bar+Doolin" target="_blank">&#128205; Google Maps</a></div></div>
-<div class="restaurante"><div class="rest-icono">&#127860;</div><div class="rest-info"><div class="rest-nombre">Riverside Bistro Doolin</div><div class="rest-desc">Alternativa tranquila y bien valorada. Desde las 17:00.</div><a class="btn-mapa" href="https://maps.google.com/?q=Riverside+Bistro+Doolin" target="_blank">&#128205; Google Maps</a></div></div>
+<div class="restaurante" data-id="russells-doolin-r"><div class="rest-icono">&#11088;</div><div class="rest-info"><div class="rest-nombre">Russells Seafood Bar</div><div class="rest-desc">Uno de los mejores de Clare. Desde las 17:00.</div><div class="rest-aviso">&#9888;&#65039; Muy popular &mdash; reservar con bastante antelaci&oacute;n.</div><div class="rest-estado" id="estado-russells-doolin-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Russells+Seafood+Bar+Doolin" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-russells-doolin-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('russells-doolin','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('russells-doolin','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-russells-doolin-r"><span class="estrella" onclick="setEstrellas('russells-doolin',1)">★</span><span class="estrella" onclick="setEstrellas('russells-doolin',2)">★</span><span class="estrella" onclick="setEstrellas('russells-doolin',3)">★</span><span class="estrella" onclick="setEstrellas('russells-doolin',4)">★</span><span class="estrella" onclick="setEstrellas('russells-doolin',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('russells-doolin',this.value)" id="nota-russells-doolin-r"></textarea></div>
+</div></div></div>
+<div class="restaurante" data-id="riverside-doolin-r"><div class="rest-icono">&#127860;</div><div class="rest-info"><div class="rest-nombre">Riverside Bistro Doolin</div><div class="rest-desc">Alternativa tranquila y bien valorada. Desde las 17:00.</div><div class="rest-estado" id="estado-riverside-doolin-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Riverside+Bistro+Doolin" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-riverside-doolin-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Reservado</span><button class="toggle-btn" onclick="toggleEstado('riverside-doolin','reservado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('riverside-doolin','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-riverside-doolin-r"><span class="estrella" onclick="setEstrellas('riverside-doolin',1)">★</span><span class="estrella" onclick="setEstrellas('riverside-doolin',2)">★</span><span class="estrella" onclick="setEstrellas('riverside-doolin',3)">★</span><span class="estrella" onclick="setEstrellas('riverside-doolin',4)">★</span><span class="estrella" onclick="setEstrellas('riverside-doolin',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('riverside-doolin',this.value)" id="nota-riverside-doolin-r"></textarea></div>
+</div></div></div>
 
 <div class="seccion-titulo" style="margin-top:1.5rem">Boyle (Roscommon)</div>
-<div class="restaurante"><div class="rest-icono">&#9749;</div><div class="rest-info"><div class="rest-nombre">Lovage at the Gate Lodge Caf&eacute;</div><div class="rest-desc">Caf&eacute;-bistr&oacute; junto al r&iacute;o. Almuerzo. Cierra a las 17:00 (vi&ndash;s&aacute; hasta medianoche).</div><a class="btn-mapa" href="https://maps.google.com/?q=Lovage+Gate+Lodge+Cafe+Boyle" target="_blank">&#128205; Google Maps</a></div></div>
+<div class="restaurante" data-id="lovage-boyle-r"><div class="rest-icono">&#9749;</div><div class="rest-info"><div class="rest-nombre">Lovage at the Gate Lodge Caf&eacute;</div><div class="rest-desc">Caf&eacute;-bistr&oacute;. Almuerzo. Cierra a las 17:00.</div><div class="rest-estado" id="estado-lovage-boyle-r"></div><a class="btn-mapa" href="https://maps.google.com/?q=Lovage+Gate+Lodge+Cafe+Boyle" target="_blank">&#128205; Google Maps</a><div class="rest-controles" id="ctrl-lovage-boyle-r">
+  <div class="ctrl-fila"><span class="ctrl-label">Visitado</span><button class="toggle-btn" onclick="toggleEstado('lovage-boyle','visitado',this)">No</button></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Valoración</span><div class="estrellas" id="stars-lovage-boyle-r"><span class="estrella" onclick="setEstrellas('lovage-boyle',1)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',2)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',3)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',4)">★</span><span class="estrella" onclick="setEstrellas('lovage-boyle',5)">★</span></div></div>
+  <div class="ctrl-fila"><span class="ctrl-label">Nota</span><textarea class="nota-input" rows="2" placeholder="Añade una nota..." onchange="setNota('lovage-boyle',this.value)" id="nota-lovage-boyle-r"></textarea></div>
+</div></div></div>
 </div>
 
 <!-- INFORMACIÓN -->
@@ -267,9 +473,122 @@ main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
 </div>
 
 </main>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA4epvv5vwa8vESMCAG12bSGkvK-jGnwC4",
+  authDomain: "irlanda2026-5c525.firebaseapp.com",
+  projectId: "irlanda2026-5c525",
+  storageBucket: "irlanda2026-5c525.firebasestorage.app",
+  messagingSenderId: "575069161741",
+  appId: "1:575069161741:web:62a5658a0e0e0f4620c844"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window._estado = {};
+
+const RESTAURANTES = [
+  'ard-bia','an-pucan','guys-seafood','willow-tree',
+  'sage-westport','an-port-mor','oconnors-pub',
+  'hamiltons-bar','gaynors-bar','russells-doolin',
+  'riverside-doolin','lovage-boyle','dela-galway'
+];
+
+const docRef = doc(db, 'viaje', 'restaurantes');
+onSnapshot(docRef, (snap) => {
+  window._estado = snap.exists() ? snap.data() : {};
+  RESTAURANTES.forEach(id => renderRestaurante(id));
+});
+
+function renderRestaurante(id) {
+  const datos = window._estado[id] || {};
+  ['', '-r'].forEach(suf => {
+    const estadoEl = document.getElementById('estado-' + id + suf);
+    if (!estadoEl) return;
+    let html = '';
+    if (datos.reservado) html += '<span class="badge-reservado">✓ Reservado</span>';
+    if (datos.visitado) html += '<span class="badge-visitado">✓ Visitado</span>';
+    if (datos.estrellas) html += '<span class="badge-nota"><span class="estrellas-mini">' + '★'.repeat(datos.estrellas) + '</span></span>';
+    if (datos.nota) html += '<span class="badge-nota">💬 ' + datos.nota.substring(0,30) + (datos.nota.length > 30 ? '…' : '') + '</span>';
+    estadoEl.innerHTML = html;
+    const btnRes = document.querySelector('#ctrl-' + id + suf + ' .toggle-btn[onclick*="reservado"]');
+    const btnVis = document.querySelector('#ctrl-' + id + suf + ' .toggle-btn[onclick*="visitado"]');
+    const notaEl = document.getElementById('nota-' + id + suf);
+    const starsEl = document.getElementById('stars-' + id + suf);
+    if (btnRes) { btnRes.textContent = datos.reservado ? 'Sí ✓' : 'No'; btnRes.className = 'toggle-btn' + (datos.reservado ? ' activo-reservado' : ''); }
+    if (btnVis) { btnVis.textContent = datos.visitado ? 'Sí ✓' : 'No'; btnVis.className = 'toggle-btn' + (datos.visitado ? ' activo-visitado' : ''); }
+    if (notaEl && document.activeElement !== notaEl) notaEl.value = datos.nota || '';
+    if (starsEl) starsEl.querySelectorAll('.estrella').forEach((s, i) => s.classList.toggle('activa', i < (datos.estrellas || 0)));
+  });
+}
+
+async function guardar(id, campo, valor) {
+  window._estado[id] = window._estado[id] || {};
+  window._estado[id][campo] = valor;
+  await setDoc(docRef, window._estado);
+}
+
+window.toggleEstado = async function(id, campo, btn) {
+  if (!window._modoEditor) return;
+  await guardar(id, campo, !(window._estado[id] || {})[campo]);
+};
+window.setEstrellas = async function(id, n) {
+  if (!window._modoEditor) return;
+  const actual = (window._estado[id] || {}).estrellas;
+  await guardar(id, 'estrellas', actual === n ? 0 : n);
+};
+window.setNota = async function(id, texto) {
+  if (!window._modoEditor) return;
+  await guardar(id, 'nota', texto);
+};
+</script>
+
 <script>
-function mostrarVista(id,btn){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('activo'));document.getElementById('vista-'+id).classList.add('activa');btn.classList.add('activo')}
-function toggleDia(card){card.classList.toggle('abierto')}
+window._modoEditor = false;
+const CLAVE = '6131';
+
+function abrirModal() {
+  document.getElementById('modal-pwd').classList.add('visible');
+  setTimeout(() => document.getElementById('pwd-input').focus(), 100);
+}
+function cerrarModal() {
+  document.getElementById('modal-pwd').classList.remove('visible');
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('pwd-error').textContent = '';
+}
+function verificarPwd() {
+  const val = document.getElementById('pwd-input').value;
+  if (val === CLAVE) { cerrarModal(); activarEditor(); }
+  else { document.getElementById('pwd-error').textContent = 'Contraseña incorrecta'; document.getElementById('pwd-input').value = ''; document.getElementById('pwd-input').focus(); }
+}
+document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') verificarPwd(); if (e.key === 'Escape') cerrarModal(); });
+document.getElementById('modal-pwd').addEventListener('click', e => { if (e.target === document.getElementById('modal-pwd')) cerrarModal(); });
+
+function activarEditor() {
+  window._modoEditor = true;
+  document.getElementById('barra-editor').classList.add('visible');
+  document.querySelectorAll('.rest-controles').forEach(el => el.classList.add('visible'));
+}
+function salirEditor() {
+  window._modoEditor = false;
+  document.getElementById('barra-editor').classList.remove('visible');
+  document.querySelectorAll('.rest-controles').forEach(el => el.classList.remove('visible'));
+}
+window.salirEditor = salirEditor;
+
+function mostrarVista(id, btn) {
+  document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('activo'));
+  document.getElementById('vista-' + id).classList.add('activa');
+  btn.classList.add('activo');
+}
+function toggleDia(card) { card.classList.toggle('abierto'); }
 </script>
 </body>
 </html>
