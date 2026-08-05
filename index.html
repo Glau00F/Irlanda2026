@@ -511,7 +511,7 @@ function renderRestaurante(id) {
     if (datos.reservado) html += '<span class="badge-reservado">✓ Reservado</span>';
     if (datos.visitado) html += '<span class="badge-visitado">✓ Visitado</span>';
     if (datos.estrellas) html += '<span class="badge-nota"><span class="estrellas-mini">' + '★'.repeat(datos.estrellas) + '</span></span>';
-    if (datos.nota) html += '<span class="badge-nota">💬 ' + datos.nota.substring(0,30) + (datos.nota.length > 30 ? '…' : '') + '</span>';
+    if (datos.nota) html += '<span class="badge-nota" style="white-space:pre-wrap;display:block;margin-top:2px">💬 ' + datos.nota + '</span>';
     estadoEl.innerHTML = html;
     const btnRes = document.querySelector('#ctrl-' + id + suf + ' .toggle-btn[onclick*="reservado"]');
     const btnVis = document.querySelector('#ctrl-' + id + suf + ' .toggle-btn[onclick*="visitado"]');
@@ -557,7 +557,7 @@ function renderRuta(id) {
   let badgeHtml = '';
   if (datos.hecha) badgeHtml += '<span class="badge-hecha">&#10003; Hecha</span>';
   if (datos.estrellas) badgeHtml += '<span class="badge-nota"><span class="estrellas-mini">' + '&#9733;'.repeat(datos.estrellas) + '</span></span>';
-  if (datos.nota) badgeHtml += '<span class="badge-nota">&#128172; ' + datos.nota.substring(0,30) + (datos.nota.length > 30 ? '&hellip;' : '') + '</span>';
+  if (datos.nota) badgeHtml += '<span class="badge-nota" style="white-space:pre-wrap;display:block;margin-top:2px">&#128172; ' + datos.nota + '</span>';
   // Actualizar en Calendario
   const estadoEl = document.getElementById('estado-' + id);
   if (estadoEl) estadoEl.innerHTML = badgeHtml;
